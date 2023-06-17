@@ -1,0 +1,63 @@
+import express from 'express'
+import multer from 'multer'
+import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import dotenv from 'dotenv'
+dotenv.config()
+
+const router = express.Router()
+
+const bucketName = process.env.BUCKET_NAME;
+const bucketRegion = process.env.BUCKET_REGION;
+const accessKey = process.env.ACCESS_KEY;
+const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: accessKey,
+  secretAccessKey: secretAccessKey,
+  },  
+  region: bucketRegion
+});
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, "public/images");
+//     },
+//     filename: (req, file, cb) => {
+//       cb(null, req.body.name);
+//     },
+//   });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+
+router.post("/", upload.single("file"), async(req, res) => {
+    try {
+      console.log("req.body",req.body)
+      console.log("req.body",req.file)
+      const params = {
+        Bucket: bucketName,
+        Key: req.body.name,
+        Body:req.file.buffer,
+        ContentType:req.file.mimetype,
+      }
+      const commad= new PutObjectCommand(params)
+      await s3.send(commad)
+
+
+      const getObjectParams = {
+        Bucket: bucketName,
+        Key: req.body.name,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      
+      const url = await getSignedUrl(s3, command,{expiresIn:604800});
+
+      return res.status(200).json(url);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+export default router
+

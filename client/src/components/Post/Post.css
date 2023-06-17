@@ -1,0 +1,66 @@
+.Post
+{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: var(--cardColor);
+    border-radius: 1rem;
+    gap: 1rem;
+}
+
+.Post>img{
+    width: 100%;
+    max-height:40rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.Post>div>input{
+    /* border-radius: 10px; */
+    padding: 10px;   
+    width: 90%;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+.addcomment{
+    /* background-color: var(--inputColor); */
+    border-radius: 10px;   
+}
+.addcomment>span{
+   font-size: 10px;
+   cursor: pointer;
+   padding: 10px;
+   font-weight: bold;
+   color: blue;
+}
+input[type="text"]:valid + span {
+display: inline-block;  }
+  
+  input[type="text"]:invalid + span {
+display: none;  }
+.postReact{
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+.seeMore{
+    cursor: pointer;
+    color: gray;
+
+    font-size: 13px;
+}
+.addcomment{
+    background-color: var(--inputColor);
+    border-radius: 10px;
+    padding: 5px;
+    border: none;
+    outline: none;
+}
+.addcomment>span{
+    font-size:0.8rem;
+}
+.options{
+    cursor: pointer;
+}
+

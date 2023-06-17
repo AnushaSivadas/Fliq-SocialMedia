@@ -1,0 +1,15 @@
+.Posts
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.no-posts-message {
+    font-size: 20px;
+    color: #f04e4e;
+    text-align: center;
+    padding: 20px;
+    background-color: #fffcfc;
+    border-radius: 8px;
+  }
+  
