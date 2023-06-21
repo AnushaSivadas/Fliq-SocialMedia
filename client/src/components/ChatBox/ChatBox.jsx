@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { addMessage, getMessages } from "../../api/MessageRequests";
 import { getUser } from "../../api/UserRequests";
+import { createChat } from "../../api/ChatRequests";
 import "./ChatBox.css";
 import { format } from "timeago.js";
 import InputEmoji from 'react-input-emoji'
+import { useDispatch } from "react-redux";
+
 
 const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const dispatch = useDispatch()
 
   const handleChange = (newMessage)=> {
     setNewMessage(newMessage)
@@ -55,6 +59,18 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
   // Send Message
   const handleSend = async(e)=> {
     e.preventDefault()
+    if(!chat._id){
+      const data={
+        senderId:currentUser,
+         receiverId : chat.members.find((id)=>id!==currentUser),
+        text:newMessage
+
+      }
+     const response = await createChat(data)
+     chat=response.data;
+     dispatch({type:"SAVE_USER", data:chat})
+
+    }
     const message = {
       senderId : currentUser,
       text: newMessage,
@@ -73,6 +89,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
   {
     console.log("error")
   }
+
 }
 
 // Receive Message from parent component
@@ -100,10 +117,9 @@ useEffect(()=> {
                   <img
                     src={
                       userData?.profilePicture
-                        ? process.env.REACT_APP_PUBLIC_FOLDER +
-                          userData.profilePicture
+                        ? userData.profilePicture
                         : process.env.REACT_APP_PUBLIC_FOLDER +
-                          "defaultProfile.png"
+                          "defaultProfilee.png"
                     }
                     alt="Profile"
                     className="followerImage"

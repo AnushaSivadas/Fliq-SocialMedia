@@ -68,12 +68,27 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
   };
 
   const handleChangepost = () => {
+    if (desc.trim() === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Empty Description",
+        text: "Please enter a description before sharing.",
+      });
+      return;
+    }
     let postData = {
       userId: user._id,
       desc: desc,
     };
     updatePost(post._id, postData);
     setOpens(false);
+  };
+  const MAX_INPUT_LENGTH = 25;
+   const handleInputChange = (event) => {
+    const value = event.target.value;
+    if (value.length <= MAX_INPUT_LENGTH) {
+      setDesc(event.target.value)
+    }
   };
 
   return (
@@ -114,16 +129,21 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
                     <TextField
                       autoFocus
                       defaultValue={post.desc}
+                      value={desc}
                       margin="dense"
                       id="name"
                       type="text"
                       fullWidth
-                      onChange={(e) => setDesc(e.target.value)}
+                       maxLength={MAX_INPUT_LENGTH}
+          onChange={handleInputChange}
+                      // onChange={(e) => setDesc(e.target.value)}
                     />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleChangepost}>Confirm</Button>
+                    <Button onClick={handleChangepost}
+            disabled={ desc.trim() === ""}
+                    >Confirm</Button>
                   </DialogActions>
                
                

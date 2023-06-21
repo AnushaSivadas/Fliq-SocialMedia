@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../api/UserRequests";
-const Conversation = ({ data, currentUser, online }) => {
-
+const Conversation = ({ data, currentUser, online,toggleVisibility}) => {
   const [userData, setUserData] = useState(null)
   const dispatch = useDispatch()
 
@@ -15,7 +14,7 @@ const Conversation = ({ data, currentUser, online }) => {
       {
           const {data} =await getUser(userId)
          setUserData(data)
-         dispatch({type:"SAVE_USER", data:data})
+        //  dispatch({type:"SAVE_USER", data:data})
       }
       catch(error)
       {
@@ -27,11 +26,15 @@ const Conversation = ({ data, currentUser, online }) => {
   }, [])
   return (
     <>
-      <div className="follower conversation">
+      <div className="follower conversation"   
+      onClick={()=>{
+        toggleVisibility()
+      }}   >
+        
         <div>
           {online && <div className="online-dot"></div>}
           <img
-            src={userData?.profilePicture? process.env.REACT_APP_PUBLIC_FOLDER + userData.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfile.png"}
+            src={userData?.profilePicture? userData.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfilee.png"}
             alt="Profile"
             className="followerImage"
             style={{ width: "50px", height: "50px" }}

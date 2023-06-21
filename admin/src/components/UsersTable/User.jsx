@@ -33,7 +33,7 @@ const User = ({person,index}) => {
       isBlocked:blockStatus,
     }
     Swal.fire({
-      title: blockStatus?'Do you want to block?':'Do you want to unblock?',
+      title: !blockStatus?'Do you want to block?':'Do you want to unblock?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Yes',
@@ -43,7 +43,7 @@ const User = ({person,index}) => {
         // User clicked "Yes"
         blockUser(data)
         setBlockStatus((prev)=>!prev);
-        blockStatus?Swal.fire('Blocked!', 'The user has been blocked.', 'success'):Swal.fire('Unblocked!', 'The user has been unblocked.', 'success');
+        !blockStatus?Swal.fire('Blocked!', 'The user has been blocked.', 'success'):Swal.fire('Unblocked!', 'The user has been unblocked.', 'success');
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         // User clicked "No" or closed the dialog
         console.log('User clicked "No"');

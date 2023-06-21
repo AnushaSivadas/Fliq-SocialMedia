@@ -11,7 +11,6 @@ import mongoose from "mongoose";
 
 export const createPost = async (req, res) => {
   const newPost = new PostModel(req.body);
-
   try {
     await newPost.save();
 
@@ -23,14 +22,15 @@ export const createPost = async (req, res) => {
       if (user._id.toString() === post.userId.toString()) {
         post.userInfo.username = user.username;
         if (user.profilePicture)
-          post.userInfo.profilePicture = user.profilePicture;
+             post.userInfo.profilePicture = user.profilePicture;
       }
     });
     post.comments = [];
 
-   
+   console.log("post",post)
     res.status(200).json(post);
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 };

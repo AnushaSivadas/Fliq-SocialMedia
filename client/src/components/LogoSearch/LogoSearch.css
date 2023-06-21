@@ -23,3 +23,48 @@
   padding: 4px;
   color: white;
 }
+.logo {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 36px;
+  color: #ffffff;
+  background-color: #ff7f50;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo span {
+  margin: 3px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px;
+  border-radius: 8px;
+  display: inline-block;
+  background: linear-gradient(45deg, #ff6600, #ff9933);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text.media {
+  background: linear-gradient(45deg, #ff8c33, #ffb366);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text:nth-child(2) {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}

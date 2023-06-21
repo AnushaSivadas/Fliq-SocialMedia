@@ -56,10 +56,18 @@ const PostShare = () => {
   const imageRef = useRef();
   const videoRef = useRef();
 
-
   // handle post upload
   const handleUpload = async (e) => {
     e.preventDefault();
+
+    if (desc.current.value.trim() === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Empty Description",
+        text: "Please enter a description before sharing.",
+      });
+      return;
+    }
 
     //post data
     const newPost = {
@@ -73,13 +81,12 @@ const PostShare = () => {
       const fileName = Date.now() + image.name;
       data.append("name", fileName);
       data.append("file", image);
-      console.log(newPost);
       try {
         // dispatch(uploadImage(data));
-    const ImageUrl=await UploadApi.uploadImage(data);
-    newPost.image = ImageUrl.data;
+        const ImageUrl = await UploadApi.uploadImage(data);
+        newPost.image = ImageUrl.data;
 
-console.log(ImageUrl);
+        console.log(ImageUrl);
       } catch (err) {
         console.log(err);
       }
@@ -93,12 +100,22 @@ console.log(ImageUrl);
     setImage(null);
     desc.current.value = "";
   };
+  const [inputValue, setInputValue] = useState("");
+  const MAX_INPUT_LENGTH = 25;
+
+  // handle input change
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    if (value.length <= MAX_INPUT_LENGTH) {
+      setInputValue(value);
+    }
+  };
   return (
     <div className="PostShare">
       <img
         src={
           user.profilePicture
-            ?  user.profilePicture
+            ? user.profilePicture
             : serverPublic + "defaultProfilee.png"
         }
         alt="Profile"
@@ -109,6 +126,9 @@ console.log(ImageUrl);
           placeholder="What's happening?"
           required
           ref={desc}
+          value={inputValue}
+          maxLength={MAX_INPUT_LENGTH}
+          onChange={handleInputChange}
         />
         <div className="postOptions">
           <div
@@ -120,23 +140,19 @@ console.log(ImageUrl);
             Photo
           </div>
 
-          <div className="option" style={{ color: "var(--video)" }}
-          onClick={() => videoRef.current.click()}>
+          <div
+            className="option"
+            style={{ color: "var(--video)" }}
+            onClick={() => videoRef.current.click()}
+          >
             <UilPlayCircle />
             Video
           </div>
-          {/* <div className="option" style={{ color: "var(--location)" }}>
-            <UilLocationPoint />
-            Location
-          </div>
-          <div className="option" style={{ color: "var(--shedule)" }}>
-            <UilSchedule />
-            Shedule
-          </div> */}
+
           <button
             className="button ps-button"
             onClick={handleUpload}
-            disabled={loading}
+            disabled={loading || inputValue.trim() === ""}
           >
             {loading ? "uploading" : "Share"}
           </button>
@@ -145,7 +161,12 @@ console.log(ImageUrl);
             <input type="file" ref={imageRef} onChange={onImageChange} />
           </div>
           <div style={{ display: "none" }}>
-            <input type="file" ref={videoRef} accept="video/*" onChange={onVideoChange} />
+            <input
+              type="file"
+              ref={videoRef}
+              accept="video/*"
+              onChange={onVideoChange}
+            />
           </div>
         </div>
 
@@ -156,13 +177,12 @@ console.log(ImageUrl);
           </div>
         )}
 
-      {video &&( 
-      <div className="previewImage">
-      <UilTimes onClick={() => setVideo(null)} />
-      <video src={URL.createObjectURL(video)} controls />
-      </div>
-      )}
-
+        {video && (
+          <div className="previewImage">
+            <UilTimes onClick={() => setVideo(null)} />
+            <video src={URL.createObjectURL(video)} controls />
+          </div>
+        )}
       </div>
     </div>
   );

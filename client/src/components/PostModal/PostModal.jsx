@@ -52,7 +52,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
               src={
                 data.userInfo.profilePicture
                   ?data.userInfo.profilePicture
-                  : publicFolder + "defaultProfile.png"
+                  : publicFolder + "defaultProfilee.png"
               }
               alt="profile"
               className="followerImage"
