@@ -8,38 +8,36 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import "./PostsReport.css"
+import "./PostsReport.css";
 // import { getReportedPosts } from "../../actions/PostActions";
 import * as PostsApi from "../../api/PostsRequests";
 
 import TablePagination from "@mui/material/TablePagination";
-import PostReport from './PostReport.js'
+import PostReport from "./PostReport.js";
 
 export default function BasicTable() {
   const dispatch = useDispatch();
   const { posts, loading } = useSelector((state) => state.postReducer);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [reports,setReports]=useState([])
+  const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    const getAllReportedPosts=async()=>{
+    const getAllReportedPosts = async () => {
       const { data } = await PostsApi.getReportedPosts();
-      setReports(data)
-    }
+      setReports(data);
+    };
     getAllReportedPosts();
     // dispatch(getReportedPosts());
-
   }, []);
 
-  if (reports.length===0) 
-  return (
-    <div className="Posts">
-      <div className="no-posts-message">No Reported Posts</div>
-    </div>
-  );
+  if (reports.length === 0)
+    return (
+      <div className="Posts">
+        <div className="no-posts-message">No Reported Posts</div>
+      </div>
+    );
 
-  console.log("reports",reports)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -55,9 +53,7 @@ export default function BasicTable() {
   return (
     <div className="Table">
       {/* <h3>All Posts</h3> */}
-      {loading
-              ? "Fetching posts..."
-              :""}
+      {loading ? "Fetching posts..." : ""}
       <TableContainer
         component={Paper}
         style={{ boxShadow: "0px 13px 20px 0px #80808029", maxHeight: "500px" }}
@@ -75,16 +71,21 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "white" }}>
-         
-            { (rowsPerPage > 0
-                  ? reports.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : reports
-                ).map((post, index) => {
-                  return <PostReport data={post} index={page*rowsPerPage+index+1} key={post._id} />;
-                })}
+            {(rowsPerPage > 0
+              ? reports.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : reports
+            ).map((post, index) => {
+              return (
+                <PostReport
+                  data={post}
+                  index={page * rowsPerPage + index + 1}
+                  key={post._id}
+                />
+              );
+            })}
 
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>

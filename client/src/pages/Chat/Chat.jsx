@@ -24,7 +24,6 @@ const Chat = () => {
   const toggleVisibility = () => {
     setShowSearch(false);
   };
-  
 
   const [chats, setChats] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -36,7 +35,7 @@ const Chat = () => {
     const getChats = async () => {
       try {
         const { data } = await userChats(user._id);
-        dispatch({type:"USER_LIST", data:data})
+        dispatch({ type: "USER_LIST", data: data });
         setChats(data);
       } catch (error) {
         console.log(error);
@@ -76,12 +75,11 @@ const Chat = () => {
 
   async function handleSubmit() {
     try {
-      if(search){
-      let response = await getFollowedUserSearchData(search, user._id);
-      setSearchUsers(response.data);
-      setShowSearch(true);
-      }
-      else{
+      if (search) {
+        let response = await getFollowedUserSearchData(search, user._id);
+        setSearchUsers(response.data);
+        setShowSearch(true);
+      } else {
         setShowSearch(false);
       }
     } catch (error) {
@@ -93,17 +91,13 @@ const Chat = () => {
     }
   }
 
-  async function fetchChat(userId,oppUserId){
-    
-    const chat = await findChat(userId,oppUserId)
-    console.log("chatttttttttt",chat)
-    if(chat.data){
-      setCurrentChat(chat.data)
-    }else{
-    setCurrentChat({ members: [userId, oppUserId] })
-
+  async function fetchChat(userId, oppUserId) {
+    const chat = await findChat(userId, oppUserId);
+    if (chat.data) {
+      setCurrentChat(chat.data);
+    } else {
+      setCurrentChat({ members: [userId, oppUserId] });
     }
-   
   }
 
   return (
@@ -141,11 +135,10 @@ const Chat = () => {
               searchUsers.map((userr, index) => (
                 <div
                   key={index}
-                  onClick={() =>{
-                    fetchChat(user._id, userr._id)
+                  onClick={() => {
+                    fetchChat(user._id, userr._id);
                     // setCurrentChat({ members: [user._id, userr._id] })
-                  }
-                  }
+                  }}
                 >
                   <Conversation
                     toggleVisibility={toggleVisibility}
@@ -161,8 +154,9 @@ const Chat = () => {
           </div>
 
           <div className="Chat-list">
-            {chats.map((chat,index) => (
-              <div key={index}
+            {chats.map((chat, index) => (
+              <div
+                key={index}
                 onClick={() => {
                   setCurrentChat(chat);
                 }}

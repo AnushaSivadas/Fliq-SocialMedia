@@ -1,7 +1,6 @@
 import ChatModel from "../models/chatModel.js";
 import UserModel from "../models/userModel.js";
 
-
 export const createChat = async (req, res) => {
   const newChat = new ChatModel({
     members: [req.body.senderId, req.body.receiverId],
@@ -30,26 +29,26 @@ export const findChat = async (req, res) => {
     const chat = await ChatModel.findOne({
       members: { $all: [req.params.firstId, req.params.secondId] },
     });
-    res.status(200).json(chat)
+    res.status(200).json(chat);
   } catch (error) {
-    res.status(500).json(error)
+    res.status(500).json(error);
   }
 };
 
-export const getFollowers = async(req,res)=>{
-
+export const getFollowers = async (req, res) => {
   try {
-      const {userId} = req.params
-      let users = await UserModel.find({username: { $regex: new RegExp(req.query.search), $options: 'i' }})
-      
-      users = users.map((user) => {
-          const { password, ...otherDetails } = user._doc;
-          return { ...otherDetails };
-        });
-        console.log("heyyy",users)
-   
-      res.status(200).json(users);
+    const { userId } = req.params;
+    let users = await UserModel.find({
+      username: { $regex: new RegExp(req.query.search), $options: "i" },
+    });
+
+    users = users.map((user) => {
+      const { password, ...otherDetails } = user._doc;
+      return { ...otherDetails };
+    });
+
+    res.status(200).json(users);
   } catch (error) {
-      res.status(500).json(error)
+    res.status(500).json(error);
   }
-}
+};

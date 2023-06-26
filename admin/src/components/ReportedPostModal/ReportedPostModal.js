@@ -8,21 +8,10 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 
-
-import './ReportedPostModal.css'
-function ReportedPostModal({ reportModalOpened, setReportModalOpened,data }) {
+import "./ReportedPostModal.css";
+function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
   const theme = useMantineTheme();
-  console.log("mwonu",data)
-   
-  data.map((post)=>{
 
-  // const createdAt = new Date(post.createdAt);
-  //   const date = createdAt.getDate();
-  //   const month = createdAt.getMonth() + 1;  
-  //   const year = createdAt.getFullYear();    
-  //   data.formattedDate = `${date}/${month}/${year}`;
-  })
-  
   return (
     <Modal
       size={"50%"}
@@ -38,34 +27,40 @@ function ReportedPostModal({ reportModalOpened, setReportModalOpened,data }) {
       onClose={() => setReportModalOpened(false)}
     >
       <div className="ReportedPostModal">
-   
-     <div className="Table">
-     <TableContainer
-        component={Paper}
-        style={{ boxShadow: "0px 13px 20px 0px #80808029", maxHeight: "500px" }}
-      >
-      <Table  sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
-      <TableHead>
-        <TableRow>
-            <TableCell>Reported User</TableCell>
-            <TableCell>Reported Date</TableCell>
-            <TableCell>Reported Reason</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody >
-          {data.map((post)=>{
-            return(
-        <TableRow>
-            <TableCell>{post.user.username}</TableCell>
-            <TableCell>{post.formattedDate}</TableCell>
-            <TableCell>{post.reason}</TableCell>
-        </TableRow>
-          )})}
-      </TableBody>
-      </Table>
-      </TableContainer>
-      </div>
-   
+        <div className="Table">
+          <TableContainer
+            component={Paper}
+            style={{
+              boxShadow: "0px 13px 20px 0px #80808029",
+              maxHeight: "500px",
+            }}
+          >
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label="simple table"
+              stickyHeader
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Reported User</TableCell>
+                  {/* <TableCell>Reported Date</TableCell> */}
+                  <TableCell>Reported Reason</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((post) => {
+                  return (
+                    <TableRow>
+                      <TableCell>{post.user.username}</TableCell>
+                      {/* <TableCell>{post.formattedDate}</TableCell> */}
+                      <TableCell>{post.reason}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </Modal>
   );

@@ -51,7 +51,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
             <img
               src={
                 data.userInfo.profilePicture
-                  ?data.userInfo.profilePicture
+                  ? data.userInfo.profilePicture
                   : publicFolder + "defaultProfilee.png"
               }
               alt="profile"
@@ -61,11 +61,8 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
               <span>{data.userInfo.username}</span>
               <span>{time} ago</span>
             </div>
-            
           </div>
-          <div>
-            {data.desc}
-          </div>
+          <div>{data.desc}</div>
           <div>
             <div className="detail">
               {data.comments.map((comment, id) => {
@@ -74,13 +71,16 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                     <div>
                       <b>{comment.username}</b> {comment.comment}
                     </div>
-                    {comment.userId === user._id ? (
-                      <div onClick={() => handleCommentDeletion(comment)}>
-                        <UilTrash size="20" />
-                      </div>
-                    ) : <div style={{display:"none"}}>
-                    <UilTrash size="20" />
-                  </div> // or any other content you want to display when the condition is false
+                    {
+                      comment.userId === user._id ? (
+                        <div onClick={() => handleCommentDeletion(comment)}>
+                          <UilTrash size="20" />
+                        </div>
+                      ) : (
+                        <div style={{ display: "none" }}>
+                          <UilTrash size="20" />
+                        </div>
+                      ) // or any other content you want to display when the condition is false
                     }
                   </div>
                 );

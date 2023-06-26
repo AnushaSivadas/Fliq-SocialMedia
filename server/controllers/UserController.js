@@ -58,7 +58,6 @@ export const getAllUsersDynamically = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
-  // console.log("Data Received", req.body)
   const { _id, currentUserAdmin, password } = req.body;
 
   if (id === _id) {
@@ -114,7 +113,6 @@ export const deleteUser = async (req, res) => {
 export const followUser = async (req, res) => {
   const id = req.params.id;
   const { _id } = req.body;
-  console.log(id, _id);
   if (_id == id) {
     res.status(403).json("Action Forbidden");
   } else {

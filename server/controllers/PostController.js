@@ -4,9 +4,6 @@ import CommentModel from "../models/commentModel.js";
 import ReportModel from "../models/postsReportModel.js";
 import mongoose from "mongoose";
 
-
-
-
 // creating a post
 
 export const createPost = async (req, res) => {
@@ -17,20 +14,18 @@ export const createPost = async (req, res) => {
     const post = JSON.parse(JSON.stringify(newPost));
     post.userInfo = {};
     let users = await UserModel.find();
-
     users.forEach((user) => {
       if (user._id.toString() === post.userId.toString()) {
         post.userInfo.username = user.username;
         if (user.profilePicture)
-             post.userInfo.profilePicture = user.profilePicture;
+          post.userInfo.profilePicture = user.profilePicture;
       }
     });
     post.comments = [];
 
-   console.log("post",post)
     res.status(200).json(post);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -42,7 +37,7 @@ export const getPost = async (req, res) => {
 
   try {
     const post = await PostModel.findById(id);
-   
+
     res.status(200).json(post);
   } catch (error) {
     res.status(500).json(error);
@@ -53,7 +48,6 @@ export const getPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   const postId = req.params.id;
   const { userId } = req.body;
-  console.log("updatePost", req.body);
 
   try {
     const post = await PostModel.findById(postId);
@@ -180,7 +174,6 @@ export const deleteComment = async (req, res) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
 
-   
       res.status(200).json(allPosts);
     } else {
       res.status(403).json("Action forbidden");
@@ -298,7 +291,6 @@ export const getTimelinePosts = async (req, res) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
-   
     res.status(200).json(allPosts);
   } catch (error) {
     res.status(500).json(error);
@@ -398,7 +390,6 @@ export const addComment = async (req, res) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
-    
     res.status(200).json(allPosts);
   } catch (error) {
     console.log(error);
@@ -411,11 +402,13 @@ export const reportPost = async (req, res) => {
   const reportInfo = { userId: req.body.userId, reason: req.body.reason };
 
   const postExist = await ReportModel.findOne({ postId: req.body.postId });
-  const reportExist = await ReportModel.findOne({ reports: { $elemMatch: { userId: req.body.userId } } });
-// if(reportExist){
- 
-//   res.status(200).json("Reported");
-// }else{
+  const reportExist = await ReportModel.findOne({
+    reports: { $elemMatch: { userId: req.body.userId } },
+  });
+  // if(reportExist){
+
+  //   res.status(200).json("Reported");
+  // }else{
   if (!postExist) {
     const reportData = {
       postId: req.body.postId,
@@ -449,5 +442,5 @@ export const reportPost = async (req, res) => {
       res.status(500).json(error);
     }
   }
-// }
+  // }
 };

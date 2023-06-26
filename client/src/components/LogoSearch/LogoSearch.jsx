@@ -11,7 +11,7 @@ const LogoSearch = () => {
     <div className="LogoSearch">
     <Link to="../home">
 
-      <img src={Home} alt="" />
+      <img src={Logo} alt="" />
     </Link>
 
       {/* <div className="Search">

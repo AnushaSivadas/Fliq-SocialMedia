@@ -1,10 +1,10 @@
 import { Modal, useMantineTheme } from "@mantine/core";
-import Swal from 'sweetalert2';
-import './OptionsModal.css'
+import Swal from "sweetalert2";
+import "./OptionsModal.css";
 import { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ReportModal from "../ReportModal/ReportModal.jsx";
-import { deletePost} from "../../actions/PostsAction";
+import { deletePost } from "../../actions/PostsAction";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -12,45 +12,39 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import {updatePost} from '../../api/PostsRequests.js'
+import { updatePost } from "../../api/PostsRequests.js";
 
-
-
-
-function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
+function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
   const dispatch = useDispatch();
 
   const theme = useMantineTheme();
-  const [reportModalOpened,setReportModalOpened]=useState(false)
+  const [reportModalOpened, setReportModalOpened] = useState(false);
   const { user } = useSelector((state) => state.authReducer.authData);
-  let isUsersPost=false
+  let isUsersPost = false;
 
- if(userId===user._id){
-   isUsersPost=true
- }
+  if (userId === user._id) {
+    isUsersPost = true;
+  }
   const handleReportClick = () => {
-   // setModalOpen(false); // Close the current modal
-   setReportModalOpened(true); // Open the report modal
+    // setModalOpen(false); // Close the current modal
+    setReportModalOpened(true); // Open the report modal
   };
 
-  const handlePostDeletion = async() => {
+  const handlePostDeletion = async () => {
     Swal.fire({
-      title: 'Are you sure?',
-      icon: 'warning',
+      title: "Are you sure?",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel',
-    }).then(result => {
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deletePost(post._id,user._id));
+        dispatch(deletePost(post._id, user._id));
         setModalOpen(false);
-        Swal.fire('Deleted!', 'The item has been deleted.', 'success');
+        Swal.fire("Deleted!", "The item has been deleted.", "success");
       }
     });
-    
-    
   };
-
 
   const [opens, setOpens] = useState(false);
   const [desc, setDesc] = useState(post.desc);
@@ -64,7 +58,7 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
   };
 
   const handleClose = () => {
-    setModalOpen(false)
+    setModalOpen(false);
   };
 
   const handleChangepost = () => {
@@ -84,10 +78,10 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
     setOpens(false);
   };
   const MAX_INPUT_LENGTH = 25;
-   const handleInputChange = (event) => {
+  const handleInputChange = (event) => {
     const value = event.target.value;
     if (value.length <= MAX_INPUT_LENGTH) {
-      setDesc(event.target.value)
+      setDesc(event.target.value);
     }
   };
 
@@ -114,57 +108,60 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef,post,userId }) {
       }}
     >
       <div className="options">
-      {isUsersPost && (
-        <div>
-       <div onClick={handlePostEdit} >Edit</div>
+        {isUsersPost && (
+          <div>
+            <div onClick={handlePostEdit}>Edit</div>
 
-       <Dialog open={opens} onClose={handleCloses}>
-                  <DialogTitle>Edit Post</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      <p className="text-red-500">
-                        *Publishing this revision wil overwrite its orginal
-                      </p>
-                    </DialogContentText>
-                    <TextField
-                      autoFocus
-                      defaultValue={post.desc}
-                      value={desc}
-                      margin="dense"
-                      id="name"
-                      type="text"
-                      fullWidth
-                       maxLength={MAX_INPUT_LENGTH}
-          onChange={handleInputChange}
-                      // onChange={(e) => setDesc(e.target.value)}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleChangepost}
-            disabled={ desc.trim() === ""}
-                    >Confirm</Button>
-                  </DialogActions>
-               
-               
-         </Dialog>
+            <Dialog open={opens} onClose={handleCloses}>
+              <DialogTitle>Edit Post</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  <p className="text-red-500">
+                    *Publishing this revision wil overwrite its orginal
+                  </p>
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  defaultValue={post.desc}
+                  value={desc}
+                  margin="dense"
+                  id="name"
+                  type="text"
+                  fullWidth
+                  maxLength={MAX_INPUT_LENGTH}
+                  onChange={handleInputChange}
+                  // onChange={(e) => setDesc(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button
+                  onClick={handleChangepost}
+                  disabled={desc.trim() === ""}
+                >
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
 
-       <hr/>
-       <div onClick={handlePostDeletion}>Delete</div>
-       </div>
-      )}
-        
+            <hr />
+            <div onClick={handlePostDeletion}>Delete</div>
+          </div>
+        )}
+
         {!isUsersPost && (
           <div>
-        <div style={{color:"red"}} onClick={handleReportClick}>Report</div>
-        <ReportModal
-        reportModalOpened={reportModalOpened}
-        setReportModalOpened={setReportModalOpened}
-        post={post}/>
-        </div>
+            <div style={{ color: "red" }} onClick={handleReportClick}>
+              Report
+            </div>
+            <ReportModal
+              reportModalOpened={reportModalOpened}
+              setReportModalOpened={setReportModalOpened}
+              post={post}
+            />
+          </div>
         )}
       </div>
-      
     </Modal>
   );
 }

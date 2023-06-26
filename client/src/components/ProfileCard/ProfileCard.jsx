@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
-import { getFollowers,getFollowing } from "../../api/UserRequests";
+import { getFollowers, getFollowing } from "../../api/UserRequests";
 import Followers from "../Followers/Followers";
 
 const ProfileCard = ({ location }) => {
@@ -19,11 +19,9 @@ const ProfileCard = ({ location }) => {
   const dispatch = useDispatch();
   const [modalOpened, setModalOpened] = useState(false);
   const [persons, setPersons] = useState([]);
-  
 
   useEffect(() => {
     const fetchProfileUser = async () => {
-      console.log("fetching");
       const profile = await UserApi.getUser(params.id);
       setProfileUser(profile.data);
       setFollowing(profile.data.followers.includes(user._id));
@@ -31,7 +29,7 @@ const ProfileCard = ({ location }) => {
     if (params.id && params.id !== user._id) {
       fetchProfileUser();
     }
-  }, [user,params]);
+  }, [user, params]);
 
   const handleFollow = () => {
     following
@@ -39,19 +37,17 @@ const ProfileCard = ({ location }) => {
       : dispatch(followUser(profileUser._id, user));
     setFollowing((prev) => !prev);
   };
-  const handleFollowersList =async () => {
-  const followers=await getFollowers(profileUser._id)
-  setPersons(followers.data)
-  setModalOpened(true)
+  const handleFollowersList = async () => {
+    const followers = await getFollowers(profileUser._id);
+    setPersons(followers.data);
+    setModalOpened(true);
   };
-  const handleFollowingList =async () => {
-    const following=await getFollowing(profileUser._id)
-  setPersons(following.data)
-  setModalOpened(true)
-
-
-    };
-
+  const handleFollowingList = async () => {
+    const following = await getFollowing(profileUser._id);
+    setPersons(following.data);
+    setModalOpened(true);
+  };
+console.log("dp",profileUser.profilePicture)
   return (
     <div className="ProfileCard">
       <div className="ProfileImages">
@@ -102,22 +98,28 @@ const ProfileCard = ({ location }) => {
         <hr />
         <div>
           <div className="follow">
-            <span onClick={handleFollowersList}>{profileUser.followers.length}</span>
+            <span onClick={handleFollowersList}>
+              {profileUser.followers.length}
+            </span>
             <span>Followers</span>
           </div>
           <div className="vl"></div>
           <div className="follow">
             {location === "homepage" && (
               <>
-                <span onClick={handleFollowingList}>{user.following.length}</span>
+                <span onClick={handleFollowingList}>
+                  {user.following.length}
+                </span>
               </>
             )}
             {location === "profilePage" && (
               <>
-                <span onClick={handleFollowingList}>{profileUser.following.length}</span>
+                <span onClick={handleFollowingList}>
+                  {profileUser.following.length}
+                </span>
               </>
             )}
-            
+
             <span>Following</span>
           </div>
           {/* for profilepage */}
@@ -151,8 +153,11 @@ const ProfileCard = ({ location }) => {
           </Link>
         </span>
       )}
-      <Followers  modalOpened={modalOpened}
-        setModalOpened={setModalOpened} persons={persons}/>
+      <Followers
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        persons={persons}
+      />
     </div>
   );
 };

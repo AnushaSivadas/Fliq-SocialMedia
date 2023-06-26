@@ -8,9 +8,8 @@ import PostModal from "../PostModal/PostModal.jsx";
 import { likePost } from "../../api/PostsRequests";
 import { useSelector, useDispatch } from "react-redux";
 import { uploadComment } from "../../actions/UploadAction";
-import { UilEllipsisV } from '@iconscout/react-unicons';
+import { UilEllipsisV } from "@iconscout/react-unicons";
 import OptionsModal from "../OptionsModal/OptionsModal";
-
 
 const Post = ({ data }) => {
   const dispatch = useDispatch();
@@ -20,13 +19,12 @@ const Post = ({ data }) => {
 
   const [modalOpened, setModalOpened] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  
-  const iconRef=useRef(null);
+
+  const iconRef = useRef(null);
 
   const [liked, setLiked] = useState(data.likes.includes(user._id));
   const [likes, setLikes] = useState(data.likes.length);
   const desc = useRef();
-
 
   const handleLike = () => {
     likePost(data._id, user._id);
@@ -82,11 +80,6 @@ const Post = ({ data }) => {
   } else {
     timeDifference = days + " days";
   }
-  // console.log("time"+timeDifference)
-  // console.log("Difference in seconds: " + seconds);
-  // console.log("Difference in minutes: " + minutes);
-  // console.log("Difference in hours: " + hours);
-  // console.log("Difference in days: " + days);
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -104,7 +97,7 @@ const Post = ({ data }) => {
           <img
             src={
               data.userInfo.profilePicture
-                ?  data.userInfo.profilePicture
+                ? data.userInfo.profilePicture
                 : publicFolder + "defaultProfilee.png"
             }
             alt="profile"
@@ -112,35 +105,38 @@ const Post = ({ data }) => {
           />
           <div className="name">
             <span>{data.userInfo.username}</span>
-            <span style={{color:"gray",fontSize:"0.7rem"}}>{timeDifference} ago</span>
+            <span style={{ color: "gray", fontSize: "0.7rem" }}>
+              {timeDifference} ago
+            </span>
           </div>
         </div>
-            <div className="options" ref={iconRef} onClick={() => setModalOpen(true)}>
-              <UilEllipsisV size="20"/>
-            </div>
-            <OptionsModal 
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-            iconRef={iconRef}
-            post={data}
-            userId={data.userId}/>
-
+        <div
+          className="options"
+          ref={iconRef}
+          onClick={() => setModalOpen(true)}
+        >
+          <UilEllipsisV size="20" />
+        </div>
+        <OptionsModal
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          iconRef={iconRef}
+          post={data}
+          userId={data.userId}
+        />
       </div>
-      
-    
 
-      <img
-        src={data.image ? data.image : ""}
-        alt=""
-      />
-       {!data.image && <span style={{fontWeight:"bold"}}>
-        {truncatedText}
-        {shouldShowSeeMore && (
-          <span onClick={toggleText} className="seeMore">
-            ...more
-          </span>
-        )}
-      </span>}
+      <img src={data.image ? data.image : ""} alt="" />
+      {!data.image && (
+        <span style={{ fontWeight: "bold" }}>
+          {truncatedText}
+          {shouldShowSeeMore && (
+            <span onClick={toggleText} className="seeMore">
+              ...more
+            </span>
+          )}
+        </span>
+      )}
 
       <div className="postReact">
         <img
@@ -156,34 +152,39 @@ const Post = ({ data }) => {
         {likes} likes
       </span>
 
-     {data.image && <span>
-        <b>{data.userInfo.username} </b>
-        {truncatedText}
-        {shouldShowSeeMore && (
-          <span onClick={toggleText} className="seeMore">
-            ...more
-          </span>
-        )}
-      </span>}
+      {data.image && (
+        <span>
+          <b>{data.userInfo.username} </b>
+          {truncatedText}
+          {shouldShowSeeMore && (
+            <span onClick={toggleText} className="seeMore">
+              ...more
+            </span>
+          )}
+        </span>
+      )}
 
-      <div className="detail" style={{fontSize:"0.8rem"}}>
+      <div className="detail" style={{ fontSize: "0.8rem" }}>
         {data.comments.slice(0, 2).map((comment, id) => {
           return (
             <span>
-              
               <b>{comment.username}</b> {comment.comment}
               <br></br>
             </span>
           );
         })}
       </div>
-      <div onClick={() => setModalOpened(true)} style={{fontSize:"smaller",cursor:"pointer"}}>
+      <div
+        onClick={() => setModalOpened(true)}
+        style={{ fontSize: "smaller", cursor: "pointer" }}
+      >
         View All {data.comments.length} comments
       </div>
       <PostModal
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
-        data={data} time={timeDifference}
+        data={data}
+        time={timeDifference}
       />
       <div className="addcomment">
         <input type="text" placeholder="Add comment..." required ref={desc} />

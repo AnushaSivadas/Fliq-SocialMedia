@@ -85,8 +85,6 @@ const PostShare = () => {
         // dispatch(uploadImage(data));
         const ImageUrl = await UploadApi.uploadImage(data);
         newPost.image = ImageUrl.data;
-
-        console.log(ImageUrl);
       } catch (err) {
         console.log(err);
       }
