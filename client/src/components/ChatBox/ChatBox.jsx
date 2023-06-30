@@ -4,15 +4,56 @@ import { addMessage, getMessages } from "../../api/MessageRequests";
 import { getUser } from "../../api/UserRequests";
 import { createChat } from "../../api/ChatRequests";
 import "./ChatBox.css";
+import { useNavigate } from "react-router-dom";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { FaVideo, FaPhone } from "react-icons/fa";
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (validateImage(file)) {
+        setSelectedImage(file);
+      } else {
+        // Show an error message or perform any other action for invalid image
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Image",
+          text: "Please select a valid image file (JPEG, PNG, or GIF).",
+        });
+      }
+
+      openModal();
+    }
+  };
+
+  // Image validation function
+  const validateImage = (img) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (allowedTypes.includes(img.type)) {
+      return true;
+    }
+    return false;
+  };
 
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
@@ -55,6 +96,9 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   // Send Message
   const handleSend = async (e) => {
     e.preventDefault();
+    if (!newMessage || !newMessage.trim()) {
+      return; // Do nothing if newMessage is empty
+    }
     if (!chat._id) {
       const data = {
         senderId: currentUser,
@@ -100,7 +144,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
             {/* chat-header */}
             <div className="chat-header">
               <div className="follower">
-                <div>
+                <div onClick={() => navigate(`/profile/${userData._id}`)}>
                   <img
                     src={
                       userData?.profilePicture
@@ -118,6 +162,10 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                     </span>
                   </div>
                 </div>
+              <div className="chat-header-icons">
+                <FaPhone className="chat-header-icon" />
+                <FaVideo className="chat-header-icon" />
+              </div>
               </div>
               <hr
                 style={{
@@ -156,10 +204,41 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                 type="file"
                 name=""
                 id=""
+                accept="image/*"
                 style={{ display: "none" }}
                 ref={imageRef}
+                onChange={handleImageChange}
               />
-            </div>{" "}
+            </div>
+
+            {/* Modal for Image Preview */}
+            {selectedImage && isModalOpen && (
+              <div className="modal" onClick={closeModal}>
+                <div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span className="close-modal" onClick={closeModal}>
+                    &times;
+                  </span>
+                  <img
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected"
+                    className="selected-image"
+                  />
+                  <div className="caption-container">
+                    {/* <input
+          type="text"
+          placeholder="Enter a caption..."
+          className="caption-input"
+        /> */}
+                    <button className="send-button" onClick={handleSend}>
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <span className="chatbox-empty-message">

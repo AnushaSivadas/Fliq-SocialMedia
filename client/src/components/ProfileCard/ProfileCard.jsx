@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ProfileCard.css";
 import Cover from "../../img/cover.jpg";
 import Profile from "../../img/profileImg.jpg";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
@@ -17,6 +17,7 @@ const ProfileCard = ({ location }) => {
   const [following, setFollowing] = useState(false);
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [modalOpened, setModalOpened] = useState(false);
   const [persons, setPersons] = useState([]);
 
@@ -32,11 +33,18 @@ const ProfileCard = ({ location }) => {
   }, [user, params]);
 
   const handleFollow = () => {
-    following
-      ? dispatch(unfollowUser(profileUser._id, user))
-      : dispatch(followUser(profileUser._id, user));
+    if(following)
+    { dispatch(unfollowUser(profileUser._id, user))
+     }else{
+    dispatch(followUser(profileUser._id, user));
+     }
     setFollowing((prev) => !prev);
   };
+
+  const navigateToChat = (userId) => {
+    navigate("/chat", { state: { userId } });
+  };
+  
   const handleFollowersList = async () => {
     const followers = await getFollowers(profileUser._id);
     setPersons(followers.data);
@@ -47,7 +55,6 @@ const ProfileCard = ({ location }) => {
     setPersons(following.data);
     setModalOpened(true);
   };
-console.log("dp",profileUser.profilePicture)
   return (
     <div className="ProfileCard">
       <div className="ProfileImages">
@@ -89,6 +96,16 @@ console.log("dp",profileUser.profilePicture)
           >
             {following ? "Unfollow" : "Follow"}
           </button>
+        ) : (
+          ""
+        )}
+        {user._id !== params.id && location === "profilePage" && following ? (
+          <button
+          className="button fc-button"
+          onClick={ ()=>navigateToChat(profileUser._id) }
+        >
+          Message
+        </button>
         ) : (
           ""
         )}

@@ -30,12 +30,12 @@ export const SidebarData = [
     path:"/users"
 
   },
-  {
-    icon: UilPackage,
-    heading: "Posts",
-    path:"/posts"
+  // {
+  //   icon: UilPackage,
+  //   heading: "Posts",
+  //   path:"/posts"
 
-  },
+  // },
   {
     icon: UilClipboardAlt,
     heading: 'Reported Posts',

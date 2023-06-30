@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Post.css";
 import Comment from "../../img/comment.png";
 import Share from "../../img/share.png";
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { uploadComment } from "../../actions/UploadAction";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import OptionsModal from "../OptionsModal/OptionsModal";
+import ClipboardJS from "clipboard";
 
 const Post = ({ data }) => {
   const dispatch = useDispatch();
@@ -21,10 +22,20 @@ const Post = ({ data }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const iconRef = useRef(null);
+  const copyButtonRef = useRef(null);
 
   const [liked, setLiked] = useState(data.likes.includes(user._id));
   const [likes, setLikes] = useState(data.likes.length);
   const desc = useRef();
+
+  useEffect(() => {
+    const clipboard = new ClipboardJS(copyButtonRef.current);
+
+    // Clean up the clipboard instance when the component unmounts
+    return () => {
+      clipboard.destroy();
+    };
+  }, []);
 
   const handleLike = () => {
     likePost(data._id, user._id);
@@ -127,6 +138,9 @@ const Post = ({ data }) => {
       </div>
 
       <img src={data.image ? data.image : ""} alt="" />
+
+      {data.video ? <video src={data.video} controls /> : null}
+
       {!data.image && (
         <span style={{ fontWeight: "bold" }}>
           {truncatedText}
@@ -146,7 +160,23 @@ const Post = ({ data }) => {
           onClick={handleLike}
         />
         <img src={Comment} alt="" />
-        <img src={Share} alt="" />
+        <button
+          ref={copyButtonRef}
+          data-clipboard-text = {`https://localhost:3000/post/${data._id}`}
+          onClick={() => {
+            // Optional: Provide visual feedback to the user
+            alert("Link copied!");
+          }}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            outline: "none",
+          }}
+        >
+          <img src={Share} alt="" />
+        </button>
       </div>
       <span style={{ color: "var(--gray)", fontSize: "12px" }}>
         {likes} likes

@@ -14,12 +14,12 @@ const Posts = () => {
 
   useEffect(() => {
     dispatch(getTimelinePosts(user._id));
-
   }, []);
+
   posts = posts.filter((post) => post.status);
 
-  if (params.id) posts = posts.filter((post) => post.userId === params.id);
-  // else posts = posts.filter((post) => !post.isReported);
+  if (params.id)
+   posts = posts.filter((post) => post.userId === params.id);
   
   if (posts.length === 0) {
     return (

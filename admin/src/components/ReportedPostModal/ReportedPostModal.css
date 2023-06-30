@@ -4,6 +4,7 @@
     object-fit: cover;
     border-radius: 0.5rem;
 }
+
 .PostModal{
     display: grid; 
     grid-template-columns: auto auto;
@@ -20,4 +21,9 @@ gap:1rem;
 .followers>div{
     display: flex;
     gap: 10px;
+}
+.followerImage{
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
 }

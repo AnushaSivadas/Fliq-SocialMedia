@@ -6,7 +6,7 @@ import { UilLocationPoint } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadImage, uploadPost } from "../../actions/UploadAction";
+import { uploadImage, uploadPost,uploadVideo } from "../../actions/UploadAction";
 import * as UploadApi from "../../api/UploadRequest";
 
 import Swal from "sweetalert2";
@@ -89,6 +89,22 @@ const PostShare = () => {
         console.log(err);
       }
     }
+
+    if (video) {
+      const data = new FormData();
+      const fileName = Date.now() + video.name;
+      data.append("name", fileName);
+      data.append("file", video);
+      try {
+        // dispatch(uploadVideo(data));
+        const videoUrl = await UploadApi.uploadVideo(data); // Replace with your video upload API call
+       newPost.video = videoUrl.data; // Assign the video URL/key to the newPost object
+      console.log("aftervideo",newPost)
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     dispatch(uploadPost(newPost));
     resetShare();
   };
@@ -96,7 +112,9 @@ const PostShare = () => {
   // Reset Post Share
   const resetShare = () => {
     setImage(null);
+    setVideo(null);
     desc.current.value = "";
+    setInputValue("");
   };
   const [inputValue, setInputValue] = useState("");
   const MAX_INPUT_LENGTH = 25;
@@ -156,7 +174,10 @@ const PostShare = () => {
           </button>
 
           <div style={{ display: "none" }}>
-            <input type="file" ref={imageRef} onChange={onImageChange} />
+            <input type="file"
+              accept="image/*"
+             ref={imageRef} 
+             onChange={onImageChange} />
           </div>
           <div style={{ display: "none" }}>
             <input

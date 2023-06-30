@@ -6,7 +6,7 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
-// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -43,8 +43,8 @@ router.post("/", upload.single("file"), async (req, res) => {
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
     };
-    const commad = new PutObjectCommand(params);
-    await s3.send(commad);
+    const command = new PutObjectCommand(params);
+    await s3.send(command);
 
     // const getObjectParams = {
     //   Bucket: bucketName,
@@ -54,12 +54,39 @@ router.post("/", upload.single("file"), async (req, res) => {
 
     // const url = await getSignedUrl(s3, command, { expiresIn: 604800 });
     const url = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com/${req.body.name}`;
-
     return res.status(200).json(url);
-    // console.log("command",commad)
   } catch (error) {
     console.error(error);
   }
 });
+
+router.post("/video", upload.single("file"), async (req, res) => {
+  try {
+    console.log("keriii")
+    const params = {
+      Bucket: bucketName,
+      Key:"videos/" + req.body.name,
+      Body:req.file.buffer,
+      ContentType:req.file.mimetype,
+    }
+    const command= new PutObjectCommand(params)
+    await s3.send(command)
+
+
+    // const getObjectParams = {
+    //   Bucket: bucketName,
+    //   Key:"videos/" + req.body.name,
+    // };
+    // const command = new GetObjectCommand(getObjectParams);
+
+    // const url = await getSignedUrl(s3, command,{expiresIn:604800});
+    const url = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com/${params.Key}`;
+    return res.status(200).json(url);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to upload video." });
+  }
+});
+
 
 export default router;

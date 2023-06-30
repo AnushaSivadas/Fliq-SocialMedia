@@ -7,6 +7,7 @@ const postSchema = mongoose.Schema(
     likes: [],
     status:{type:Boolean,default:true},
     image: String,
+    video:String,
   },
   {
     timestamps: true,

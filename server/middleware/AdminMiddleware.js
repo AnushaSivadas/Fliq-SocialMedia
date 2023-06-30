@@ -8,10 +8,16 @@ const authMiddleWare = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     if (token) {
       const decoded = jwt.verify(token, secret);
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
+      
+      next();
+    } else {
+      throw new Error("Token not provided");
     }
-    next();
   } catch (error) {
-    res.status(404).json({ message: "token expired" });
+    res.status(401).json({ error: "Unauthorized" });
   }
 };
 

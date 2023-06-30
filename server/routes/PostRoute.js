@@ -3,7 +3,7 @@ import { createPost, deletePost, getPost, getTimelinePosts,deleteComment, likePo
 import authMiddleWare from '../middleware/AuthMiddleware.js'
 const router = express.Router()
 
-router.post('/',createPost)
+router.post('/',authMiddleWare,createPost)
 router.get('/:id', getPost)
 router.put('/:id', updatePost)
 router.post('/report',reportPost)

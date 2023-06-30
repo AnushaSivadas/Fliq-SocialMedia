@@ -63,15 +63,16 @@ const Post = ({ data, index }) => {
       </TableCell>
 
       <TableCell align="left">
-        <img
-          src={
+       {data.post.video ? 
+       <video src={data.post.video} controls  className="postImage"/> : 
+       <img src={
             data.post.image
               ? data.post.image
               : publicFolder + "defaultProfilee.png"
           }
           alt="post"
           className="postImage"
-        />
+        />}
       </TableCell>
 
       <TableCell align="left">{data.post.desc}</TableCell>
@@ -82,7 +83,7 @@ const Post = ({ data, index }) => {
         <ReportedPostModal
           reportModalOpened={reportedPostInfoOpen}
           setReportModalOpened={setReportedPostInfoOpened}
-          data={data.reports}
+          data={data}
         />
       </TableCell>
 

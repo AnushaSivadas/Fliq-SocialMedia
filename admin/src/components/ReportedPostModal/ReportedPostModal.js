@@ -8,13 +8,24 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 
+
 import "./ReportedPostModal.css";
 function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
   const theme = useMantineTheme();
 
+data.reports.map((report)=>{
+  const createdAt = new Date(report.createdAt);
+const date = createdAt.getDate();
+const month = createdAt.getMonth() + 1; 
+const year = createdAt.getFullYear();
+
+report.formattedDate = `${date}/${month}/${year}`;
+})
   return (
     <Modal
-      size={"50%"}
+      size={"75%"}
       centered
       overlayColor={
         theme.colorScheme === "dark"
@@ -26,7 +37,34 @@ function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
       opened={reportModalOpened}
       onClose={() => setReportModalOpened(false)}
     >
-      <div className="ReportedPostModal">
+      <div className="PostModal">
+      {data.post.video ? 
+       <video src={data.post.video} controls  className="postModalImage"/> : <img
+          src={data.post.image ? data.post.image : ""}
+          alt=""
+          className="postModalImage"
+        />
+      }
+        <div className="followers">
+          <div>
+            <img
+              src={
+                data.user.profilePicture
+                  ? data.user.profilePicture
+                  : publicFolder + "defaultProfilee.png"}
+              alt="profile"
+              className="followerImage"
+            />
+              
+          </div>
+            <div className="name">
+            <span><b>{data.user.username}</b></span>
+            </div>
+          <div>{data.post.desc}</div>
+          <div>
+            <div className="detail">
+              
+
         <div className="Table">
           <TableContainer
             component={Paper}
@@ -36,23 +74,23 @@ function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
             }}
           >
             <Table
-              sx={{ minWidth: 650 }}
+              sx={{ minWidth: 500 }}
               aria-label="simple table"
               stickyHeader
             >
               <TableHead>
                 <TableRow>
-                  <TableCell>Reported User</TableCell>
-                  {/* <TableCell>Reported Date</TableCell> */}
-                  <TableCell>Reported Reason</TableCell>
+                  <TableCell>User</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Reason</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((post) => {
+                {data.reports.map((post) => {
                   return (
                     <TableRow>
                       <TableCell>{post.user.username}</TableCell>
-                      {/* <TableCell>{post.formattedDate}</TableCell> */}
+                      <TableCell>{post.formattedDate}</TableCell>
                       <TableCell>{post.reason}</TableCell>
                     </TableRow>
                   );
@@ -61,7 +99,13 @@ function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
             </Table>
           </TableContainer>
         </div>
+
+            </div>
+          </div>
+        </div>
       </div>
+
+      
     </Modal>
   );
 }

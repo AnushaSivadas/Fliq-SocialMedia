@@ -9,20 +9,24 @@ const authMiddleWare = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     if (token) {
       const decoded = jwt.verify(token, secret);
-
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
       req.body._id = decoded?.id;
-      // const user = await UserModel.findById(decoded?.id);
-      // if (user && user.isBlocked) {
-
-      //   res.setHeader('X-Blocked-User', 'true');
-      //   console.log("auth",res.setHeader)
-      //   return res.status(401).json({ message: "User is blocked and logged out" });
-
-      // }
+      const user = await UserModel.findById(decoded?.id);
+      console.log("userr",user)
+      if (user && user.isBlocked) {
+        console.log("blocked")
+        res.writeHead(302, { Location: "/auth" });
+        res.end();
+        return;
+      }
+      next();
+    } else {
+      throw new Error("Token not provided");
     }
-    next();
   } catch (error) {
-    console.log(error);
+    res.status(401).json({ error: "Unauthorized" });
   }
 };
 

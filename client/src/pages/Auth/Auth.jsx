@@ -171,6 +171,7 @@ const Auth = () => {
         }));
       }
     } else {
+      console.log("data",data)
       dispatch(logIn(data, navigate));
     }
   };

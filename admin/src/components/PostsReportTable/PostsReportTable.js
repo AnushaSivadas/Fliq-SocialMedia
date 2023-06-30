@@ -48,7 +48,7 @@ export default function BasicTable() {
   };
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, posts.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, reports.length - page * rowsPerPage);
 
   return (
     <div className="Table">

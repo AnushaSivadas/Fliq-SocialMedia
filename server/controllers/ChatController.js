@@ -17,7 +17,7 @@ export const userChats = async (req, res) => {
   try {
     const chat = await ChatModel.find({
       members: { $in: [req.params.userId] },
-    });
+    }).sort({ createdAt: -1 });
     res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);
@@ -38,9 +38,14 @@ export const findChat = async (req, res) => {
 export const getFollowers = async (req, res) => {
   try {
     const { userId } = req.params;
+   
     let users = await UserModel.find({
-      username: { $regex: new RegExp(req.query.search), $options: "i" },
+      $and: [
+        { username: { $regex: new RegExp(req.query.search), $options: "i" } },
+        { followers: { $in: [userId] } } 
+      ]
     });
+
 
     users = users.map((user) => {
       const { password, ...otherDetails } = user._doc;

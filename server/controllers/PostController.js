@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 // creating a post
 
 export const createPost = async (req, res) => {
+  console;
   const newPost = new PostModel(req.body);
   try {
     await newPost.save();
@@ -139,6 +140,7 @@ export const deleteComment = async (req, res) => {
             desc: 1,
             likes: 1,
             image: 1,
+            video: 1,
             status: 1,
             createdAt: 1,
             "userInfo.username": 1,
@@ -256,6 +258,7 @@ export const getTimelinePosts = async (req, res) => {
           desc: 1,
           likes: 1,
           image: 1,
+          video: 1,
           status: 1,
           createdAt: 1,
           "userInfo.username": 1,
@@ -356,6 +359,7 @@ export const addComment = async (req, res) => {
           desc: 1,
           likes: 1,
           image: 1,
+          video: 1,
           status: 1,
           createdAt: 1,
           "userInfo.username": 1,
@@ -402,12 +406,11 @@ export const reportPost = async (req, res) => {
   const reportInfo = { userId: req.body.userId, reason: req.body.reason };
 
   const postExist = await ReportModel.findOne({ postId: req.body.postId });
-  const reportExist = await ReportModel.findOne({
-    reports: { $elemMatch: { userId: req.body.userId } },
-  });
+  // const reportExist = await ReportModel.findOne({
+  //   reports: { $elemMatch: { userId: req.body.userId } },
+  // });
   // if(reportExist){
-
-  //   res.status(200).json("Reported");
+  //   res.status(200).json("Already Reported");
   // }else{
   if (!postExist) {
     const reportData = {
@@ -417,7 +420,6 @@ export const reportPost = async (req, res) => {
     };
     const newReport = new ReportModel(reportData);
     try {
-      // await PostModel.findByIdAndUpdate(req.body.postId,{isReported:true},{new:true})
       await newReport.save();
       res.status(200).json("Reported");
     } catch (error) {
@@ -425,22 +427,26 @@ export const reportPost = async (req, res) => {
       res.status(500).json(error);
     }
   } else {
-    try {
-      const post = await ReportModel.findByIdAndUpdate(
-        postExist._id,
-        {
-          $push: { reports: reportInfo },
-        },
-        { new: true }
-      );
-      if (post.reports.length > 10) {
-        await PostModel.findByIdAndUpdate(req.body.postId, { status: false });
+    const alreadyReported = postExist.reports.some((report) =>report.userId.equals(mongoose.Types.ObjectId(req.body.userId)));
+    if (alreadyReported) {
+      res.status(200).json("Already Reported");
+    } else {
+      try {
+        const post = await ReportModel.findByIdAndUpdate(
+          postExist._id,
+          {
+            $push: { reports: reportInfo },
+          },
+          { new: true }
+        );
+        if (post.reports.length > 10) {
+          await PostModel.findByIdAndUpdate(req.body.postId, { status: false });
+        }
+        res.status(200).json("Reported");
+      } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
       }
-      res.status(200).json("Reported");
-    } catch (error) {
-      console.log(error);
-      res.status(500).json(error);
     }
   }
-  // }
 };

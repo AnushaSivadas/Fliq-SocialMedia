@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { findChat, userChats } from "../../api/ChatRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { useLocation } from "react-router-dom";
 import { getFollowedUserSearchData } from "../../api/UserRequests";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
@@ -16,7 +17,9 @@ const Chat = () => {
   const dispatch = useDispatch();
   const socket = useRef();
   const { user } = useSelector((state) => state.authReducer.authData);
-  const { chattedUsers } = useSelector((state) => state.chatReducer.chatUsers);
+  // const { chattedUsers } = useSelector((state) => state.chatReducer.chatUsers);
+  const location = useLocation();
+  const userId = location.state?.userId || null;
 
   const [showSearch, setShowSearch] = useState(false);
   let [searchUsers, setSearchUsers] = useState(null);
@@ -31,6 +34,12 @@ const Chat = () => {
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
   // Get the chat in chat section
+  useEffect(() => {
+    if (userId) {
+      fetchChat(user._id, userId);
+    }
+  }, [user._id, userId]);
+
   useEffect(() => {
     const getChats = async () => {
       try {
@@ -129,7 +138,7 @@ const Chat = () => {
               </button>
             </div>
           </form>
-
+          
           <div className="Chat-list">
             {showSearch &&
               searchUsers.map((userr, index) => (

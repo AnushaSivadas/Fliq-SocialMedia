@@ -25,6 +25,28 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const getBlockStatus = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  try {
+    // Retrieve the user from the database
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Assuming the user model has a property named "isBlocked"
+    const isBlocked = user.isBlocked;
+
+    // Return the block status
+    res.json({ isBlocked });
+  } catch (error) {
+    console.error('Error retrieving block status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 // Get all users
 export const getAllUsers = async (req, res) => {
   try {

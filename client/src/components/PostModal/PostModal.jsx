@@ -41,11 +41,12 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
       onClose={() => setModalOpened(false)}
     >
       <div className="PostModal">
-        <img
+      {data.video ? 
+       <video src={data.video} controls  className="postModalImage"/> :<img
           src={data.image ? data.image : ""}
           alt=""
           className="postModalImage"
-        />
+        />}
         <div className="followers">
           <div>
             <img
@@ -62,7 +63,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
               <span>{time} ago</span>
             </div>
           </div>
-          <div>{data.desc}</div>
+          <div ><b>{data.desc}</b></div>
           <div>
             <div className="detail">
               {data.comments.map((comment, id) => {

@@ -2,19 +2,34 @@ import { Modal, useMantineTheme } from "@mantine/core";
 import { reportData } from "../../utils/Constants.js";
 import { useSelector } from "react-redux";
 import { reportPost } from "../../api/PostsRequests.js";
+import Swal from "sweetalert2";
+
 
 function ReportModal({ reportModalOpened, setReportModalOpened,post }) {
   const { user } = useSelector((state) => state.authReducer.authData);
   const theme = useMantineTheme();
-  const handleReportData = (data)=>{
+  const handleReportData = async (data)=>{
     const reportData={
       postId:post._id,
       userId:user._id,
       postUserId:post.userId,
       reason:data
     }
-    reportPost(reportData)
-    setReportModalOpened(false)
+   const response = await reportPost(reportData)
+
+   if(response.data === "Already Reported"){
+          Swal.fire({
+            icon: "error",
+            title: "Already Reported",
+            text: "You have already reported,neccesary action will be taken.",
+          });
+        setReportModalOpened(false)
+
+    return
+   }
+   Swal.fire("Reported!", "The post has been reported.", "success");
+   setReportModalOpened(false)
+  
   }
   return (
     <Modal
