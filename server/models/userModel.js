@@ -4,11 +4,11 @@
     {
       username: {
         type: String,
-        required: true,
+        // required: true,
       },
       password: {
         type: String,
-        required: true,
+        // required: true,
       },
       firstname: {
         type: String,
@@ -18,6 +18,10 @@
         type: String,
         required: true,
       },
+      email:{
+        type:String,
+        required:true
+      },
       isAdmin: {
         type: Boolean,
         default: false,
@@ -26,6 +30,10 @@
         type: Boolean,
         default: false,
       },
+      googleId: {
+        type: String,
+        unique: true,
+    },
     profilePicture: String,
       coverPicture: String,
       about: String,

@@ -42,6 +42,20 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getAllSearchUsers = async (req, res) => {
+  try {
+    console.log("reeq.body",req.body)
+    // let users = await UserModel.find();
+    // users = users.map((user) => {
+    //   const { password, ...otherDetails } = user._doc;
+    //   return otherDetails;
+    // });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 export const blockManagement = async (req, res) => {
   const userId = req.body._id;
   const blockStatus = req.body.isBlocked;

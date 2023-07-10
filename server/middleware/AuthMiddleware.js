@@ -14,11 +14,8 @@ const authMiddleWare = async (req, res, next) => {
       }
       req.body._id = decoded?.id;
       const user = await UserModel.findById(decoded?.id);
-      console.log("userr",user)
       if (user && user.isBlocked) {
-        console.log("blocked")
-        res.writeHead(302, { Location: "/auth" });
-        res.end();
+        res.status(200).json("UserBlocked");
         return;
       }
       next();

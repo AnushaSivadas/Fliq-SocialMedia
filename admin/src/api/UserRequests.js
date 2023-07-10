@@ -10,3 +10,4 @@ API.interceptors.request.use((req) => {
   
 export const blockUser = (data)=> API.put(`/admin/users/block`, data)
 export const getAllUser = ()=> API.get('/admin/users')
+export const getAllUsers = (data)=> API.get('/admin/searchUsers',data)

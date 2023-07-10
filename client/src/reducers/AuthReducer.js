@@ -1,21 +1,23 @@
-const authReducer = (state = { authData: null, loading: false, error: false, updateLoading: false },action) => {
+const authReducer = (state = { authData: null, loading: false,registerError: false, error: false, updateLoading: false },action) => {
   switch (action.type) {
     case "AUTH_START":
-      return {...state, loading: true, error: false };
+      return {...state, loading: true, error: false ,registerError: false};
     case "AUTH_SUCCESS":
       localStorage.setItem("profile", JSON.stringify({...action?.data}));
 
-      return {...state,  authData: action.data, loading: false, error: false };
+      return {...state,  authData: action.data, loading: false, error: false ,registerError: false};
 
 
 
       case "AUTH_FAIL":
       return {...state, loading: false, error: action.data };
+      case "AUTH_FAIL_REGISTER":
+      return {...state, loading: false, registerError: action.data };
     case "UPDATING_START":
-      return {...state, updateLoading: true , error: false}
+      return {...state, updateLoading: true , error: false,registerError: false}
     case "UPDATING_SUCCESS":
       localStorage.setItem("profile", JSON.stringify({...action?.data}));
-      return {...state, authData: action.data, updateLoading: false, error: false}
+      return {...state, authData: action.data, updateLoading: false, error: false,registerError: false}
     
     
       case "UPDATING_FAIL":

@@ -1,20 +1,24 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import "./Auth.css";
 import Logo from "../../img/logo.png";
-import { logIn, signUp } from "../../actions/AuthActions.js";
+import { logIn, signUp, googleRegister } from "../../actions/AuthActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {  GoogleLogin } from '@react-oauth/google';
 
 const Auth = () => {
   const initialState = {
     firstname: "",
     lastname: "",
+    email:"",
     username: "",
     password: "",
     confirmpass: "",
   };
   const loading = useSelector((state) => state.authReducer.loading);
   const error = useSelector((state) => state.authReducer.error);
+  const registerError = useSelector((state) => state.authReducer.registerError);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,9 +28,10 @@ const Auth = () => {
   const [errors, setErrors] = useState({
     firstname: "",
     lastname: "",
+    email:"",
     username: "",
     password: "",
-    confirmPass: "",
+    confirmpass: "",
   });
 
   const [confirmPass, setConfirmPass] = useState(true);
@@ -41,6 +46,7 @@ const Auth = () => {
     setErrors({
       firstname: "",
       lastname: "",
+    email:"",
       username: "",
       password: "",
       confirmPass: "",
@@ -50,6 +56,7 @@ const Auth = () => {
 
   // handle Change in input
   const handleChange = (e) => {
+
     const { name, value } = e.target;
     const regex = /^[A-Za-z]+$/;
 
@@ -136,7 +143,26 @@ const Auth = () => {
           [name]: "",
         }));
       }
+    }else if (name === "email") {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (value.trim() === "") {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      } else if (!value.match(regex)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Invalid email format",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
     }
+    
 
   };
 
@@ -162,6 +188,8 @@ const Auth = () => {
           firstname:
             data.firstname.trim() === "" ? "First Name is required" : "",
           lastname: data.lastname.trim() === "" ? "Last Name is required" : "",
+          email: data.email.trim() === "" ? "Email is required" : "",
+
           username: data.username.trim() === "" ? "Username is required" : "",
           password: data.password.trim() === "" ? "Password is required" : "",
           confirmpass:
@@ -171,7 +199,6 @@ const Auth = () => {
         }));
       }
     } else {
-      console.log("data",data)
       dispatch(logIn(data, navigate));
     }
   };
@@ -224,18 +251,38 @@ const Auth = () => {
                   <span className="error">{errors.lastname}</span>
                 )}
               </div>
-            </div>
+              
+            </div>        
+            
           )}
+          {isSignUp &&(<>
+          <div >
+                <input
+                  // required
+                  type="email"
+                  placeholder="Email"
+                  className="infoInput"
+                  name="email"
+                  value={data.email}
+                  onChange={handleChange}
+                />
+              </div>
+                {errors.email && (
+                  <span className="error" style={{ margin: "0px" }}>{errors.email}</span>
+                )}
+                </>
+              )}
 
           <div>
             <input
               // required
               type="text"
-              placeholder="Username"
+              placeholder={isSignUp?"Username":"Username or Email"}
               className="infoInput"
               name="username"
               value={data.username}
               onChange={handleChange}
+              
             />
           </div>
 
@@ -244,6 +291,7 @@ const Auth = () => {
               {errors.username}
             </span>
           )}
+
           <div>
             {isSignUp && (
               <div className="inputContainer">
@@ -303,7 +351,17 @@ const Auth = () => {
           </span> */}
 
           {isSignUp ? (
-            ""
+            <span
+            style={{
+              color: "red",
+              fontSize: "12px",
+              alignSelf: "flex-end",
+              marginRight: "5px",
+              display: registerError ? "block" : "none",
+            }}
+          >
+            *{registerError}
+          </span>
           ) : (
             <span
               style={{
@@ -346,7 +404,20 @@ const Auth = () => {
             >
               {loading ? "Loading..." : isSignUp ? "SignUp" : "Login"}
             </button>
+            
           </div>
+          
+          <div>
+          OR
+          <GoogleLogin
+          onSuccess={(response)=> {
+            dispatch(googleRegister(response))
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}/>
+          </div>
+                  
         </form>
       </div>
     </div>

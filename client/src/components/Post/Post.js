@@ -11,6 +11,8 @@ import { uploadComment } from "../../actions/UploadAction";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import OptionsModal from "../OptionsModal/OptionsModal";
 import ClipboardJS from "clipboard";
+import { logout } from "../../actions/AuthActions";
+
 
 const Post = ({ data }) => {
   const dispatch = useDispatch();
@@ -37,8 +39,11 @@ const Post = ({ data }) => {
     };
   }, []);
 
-  const handleLike = () => {
-    likePost(data._id, user._id);
+  const handleLike = async () => {
+    const response = await likePost(data._id, user._id);
+    if(response.data === "UserBlocked"){
+      dispatch(logout());
+    }
     setLiked((prev) => !prev);
     liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
   };
@@ -159,7 +164,7 @@ const Post = ({ data }) => {
           style={{ cursor: "pointer" }}
           onClick={handleLike}
         />
-        <img src={Comment} alt="" />
+        <img src={Comment} alt=""style={{cursor:"pointer"}} onClick={() => {data.comments.length>0?setModalOpened(true):setModalOpened(false)}}/>
         <button
           ref={copyButtonRef}
           data-clipboard-text = {`https://localhost:3000/post/${data._id}`}
@@ -205,7 +210,7 @@ const Post = ({ data }) => {
         })}
       </div>
       <div
-        onClick={() => setModalOpened(true)}
+        onClick={() => {data.comments.length>0?setModalOpened(true):setModalOpened(false)}}
         style={{ fontSize: "smaller", cursor: "pointer" }}
       >
         View All {data.comments.length} comments
@@ -217,7 +222,7 @@ const Post = ({ data }) => {
         time={timeDifference}
       />
       <div className="addcomment">
-        <input type="text" placeholder="Add comment..." required ref={desc} />
+        <input type="text" placeholder="Add comment..." maxLength={20} required ref={desc} />
         <span onClick={handleUpload}>Post</span>
       </div>
     </div>

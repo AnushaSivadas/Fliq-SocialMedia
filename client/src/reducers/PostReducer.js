@@ -26,6 +26,8 @@ const postReducer = (
       return { ...state, error: false, posting: true };
     case "UPLOAD_COMMENT_SUCCESS":
       return { ...state, posts: action.data, posting: false, error: false };
+      case "UPDATING_SUCCESS":
+      return { ...state, posts: action.data, posting: false, error: false };
     case "UPLOAD_COMMENT_FAIL":
       return { ...state, posting: false, error: true };
     case "RETREIVING_START":

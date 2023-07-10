@@ -12,7 +12,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { updatePost } from "../../api/PostsRequests.js";
+import { updatePost } from "../../api/PostsRequests";
 
 function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
   const dispatch = useDispatch();
@@ -74,10 +74,11 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
       userId: user._id,
       desc: desc,
     };
-    updatePost(post._id, postData);
+    // updatePost(post._id, postData);
+    updatePost(postData,post._id)
     setOpens(false);
   };
-  const MAX_INPUT_LENGTH = 25;
+  const MAX_INPUT_LENGTH = 50;
   const handleInputChange = (event) => {
     const value = event.target.value;
     if (value.length <= MAX_INPUT_LENGTH) {
@@ -128,7 +129,7 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
                   id="name"
                   type="text"
                   fullWidth
-                  maxLength={MAX_INPUT_LENGTH}
+                  // maxlength={MAX_INPUT_LENGTH}
                   onChange={handleInputChange}
                   // onChange={(e) => setDesc(e.target.value)}
                 />
