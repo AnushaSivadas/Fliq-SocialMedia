@@ -12,14 +12,24 @@ export const getTimelinePosts = (id) => async (dispatch) => {
 };
 
 export const updatePost = (postData,id) => async (dispatch) => {
-  dispatch({ type: "RETREIVING_START" });
+  dispatch({ type: "UPDATING_POST_START" });
   try {
     const { data } = await PostsApi.updatePost(postData,id);
-    console.log("action",data)
-    dispatch({ type: "UPDATING_SUCCESS", data: data });
+    dispatch({ type: "UPDATING_POST_SUCCESS", data,postId:id });
   } catch (error) {
     console.log(error);
-    dispatch({ type: "RETREIVING_FAIL" });
+    dispatch({ type: "UPDATING_POST_FAIL" });
+  }
+};
+
+export const updateComment = (commentData,postId) => async (dispatch) => {
+  dispatch({ type: "UPDATING_COMMENT_START" });
+  try {
+    const { data } = await PostsApi.updateComment(commentData);
+    dispatch({ type: "UPDATING_COMMENT_SUCCESS", newComment:data.newComment,commentId:data.commentId,postId });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "UPDATING_COMMENT_FAIL" });
   }
 };
 

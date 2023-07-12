@@ -3,15 +3,18 @@ import "./InfoCard.css";
 import { UilPen } from "@iconscout/react-unicons";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
 import { logout } from "../../actions/AuthActions";
+import { useLocation } from "react-router-dom";
 
 const InfoCard = () => {
   const dispatch = useDispatch();
-  const params = useParams();
+  // const params = useParams();
+  const location = useLocation();
   const [modalOpened, setModalOpened] = useState(false);
-  const profileUserId = params.id;
+  // const profileUserId = params.id;
+  const profileUserId = location.state?.profileUserId || null;
   const [profileUser, setProfileUser] = useState({});
   const { user } = useSelector((state) => state.authReducer.authData);
 
@@ -29,7 +32,7 @@ const InfoCard = () => {
       }
     };
     fetchProfileUser();
-  }, [user, params]);
+  }, [user, profileUserId]);
 
   return (
     <div className="InfoCard">
@@ -52,26 +55,35 @@ const InfoCard = () => {
           ""
         )}
       </div>
-
-      <div className="info">
-        {/* */}
-        <span>
-          <b>Status </b>
-        </span>
-        <span>{profileUser.relationship}</span>
+      <div className="infoData">
+        <div className="info">
+          <span>
+            <b>Lives in </b>
+          </span>
+          <span className="data">{profileUser.livesIn}</span>
+        </div>
+        <div className="info">
+          <span>
+            <b>Status </b>
+          </span>
+          <span className="data">{profileUser.relationship}</span>
+        </div>
+        <div className="info">
+          <span>
+            <b>Works at </b>
+          </span>
+          <span className="data">{profileUser.worksAt}</span>
+        </div>
+        
       </div>
-      <div className="info">
+      {profileUser.email && (<div className="email">
         <span>
-          <b>Lives in </b>
+          <b><u>Email</u></b>
         </span>
-        <span>{profileUser.livesIn}</span>
-      </div>
-      <div className="info">
         <span>
-          <b>Works at </b>
+        {profileUser.email}
         </span>
-        <span>{profileUser.worksAt}</span>
-      </div>
+      </div>)}
 
       <button className="button logout-button" onClick={handleLogOut}>
         Log Out

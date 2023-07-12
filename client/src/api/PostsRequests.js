@@ -5,6 +5,7 @@ import API from '../utils/axios.js'
 
 export const getTimelinePosts= (id)=> API.get(`/posts/${id}/timeline`);
 export const updatePost = (data,id) => API.put(`posts/updatePost/${id}`, data);
+export const updateComment = (data) => API.put(`posts/updateComment`, data);
 export const likePost=(id, userId)=>API.put(`posts/${id}/like`, {userId: userId})
 export const reportPost=(data)=>API.post('posts/report', data)
 export const deletePost=(id,userId)=>API.delete(`posts/${id}`, { data: { userId: userId } })

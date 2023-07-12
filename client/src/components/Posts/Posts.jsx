@@ -3,11 +3,14 @@ import { getTimelinePosts } from "../../actions/PostsAction";
 import Post from "../Post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import "./Posts.css";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Posts = () => {
-  const params = useParams();
+  // const params = useParams();
+  const location = useLocation();
+
   const dispatch = useDispatch();
+  const profileUserId = location.state?.profileUserId || null;
   
   const { user } = useSelector((state) => state.authReducer.authData);
   let { posts, loading } = useSelector((state) => state.postReducer);
@@ -18,8 +21,8 @@ const Posts = () => {
 
   posts = posts.filter((post) => post.status);
 
-  if (params.id)
-   posts = posts.filter((post) => post.userId === params.id);
+  if (profileUserId)
+   posts = posts.filter((post) => post.userId === profileUserId);
   
   if (posts.length === 0) {
     return (

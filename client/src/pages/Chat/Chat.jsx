@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import { getFollowedUserSearchData } from "../../api/UserRequests";
-import SearchBar from "../../components/SearchBar/SearchBar";
 
 const Chat = () => {
   const dispatch = useDispatch();

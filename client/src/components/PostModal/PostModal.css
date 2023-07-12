@@ -79,6 +79,7 @@
   .commentsList {
     flex: 1;
     overflow-y: auto;
+    width: 19rem;
     padding-right: 1rem;
   }
   
@@ -155,7 +156,7 @@
 .replyComments{
   font-size:small;
   margin-top: 1rem;
-  margin-left: 2rem;
+  margin-left: 1rem;
   padding: 1rem ;
   background-color: #cbcacad1;
   border-radius: 1.5rem;

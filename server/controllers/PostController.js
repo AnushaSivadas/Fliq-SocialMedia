@@ -52,150 +52,27 @@ export const updatePost = async (req, res) => {
 
   try {
     const post = await PostModel.findById(postId);
-
+    console.log("req.body",post.userId,userId)
     if (post.userId === userId) {
-      await post.updateOne({ $set: req.body });
-      const user = await UserModel.findById(userId);
-      const followingIds = user.following;
-      followingIds.push(userId);
-const postsWithComments = await PostModel.aggregate([
-        {
-          $addFields: {
-            userId: { $toObjectId: "$userId" },
-          },
-        },
-        {
-          $match: {
-            userId: {
-              $in: followingIds.map((id) => mongoose.Types.ObjectId(id)),
-            },
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $unwind: "$userInfo",
-        },
-        {
-          $lookup: {
-            from: "comments",
-            localField: "_id",
-            foreignField: "postId",
-            as: "comments",
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "comments.userId",
-            foreignField: "_id",
-            as: "commentUsers",
-          },
-        },
-        {
-          $lookup: {
-            from: "commentreplies",
-            localField: "comments._id",
-            foreignField: "commentId",
-            as: "commentReplies",
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "commentReplies.userId",
-            foreignField: "_id",
-            as: "commentReplyUsers",
-          },
-        },
-        {
-          $project: {
-            _id: 1,
-            userId: 1,
-            desc: 1,
-            likes: 1,
-            image: 1,
-            video: 1,
-            status: 1,
-            createdAt: 1,
-            "userInfo.username": 1,
-            "userInfo.profilePicture": 1,
-            comments: {
-              $map: {
-                input: "$comments",
-                as: "comment",
-                in: {
-                  $mergeObjects: [
-                    "$$comment",
-                    {
-                      commentUser: {
-                        $arrayElemAt: [
-                          {
-                            $filter: {
-                              input: "$commentUsers",
-                              cond: { $eq: ["$$this._id", "$$comment.userId"] },
-                            },
-                          },
-                          0,
-                        ],
-                      },
-                    },
-                    { _id: "$$comment._id" },
-                    {
-                      commentReplies: {
-                        $map: {
-                          input: {
-                            $filter: {
-                              input: "$commentReplies",
-                              cond: {
-                                $eq: ["$$this.commentId", "$$comment._id"],
-                              },
-                            },
-                          },
-                          as: "reply",
-                          in: {
-                            $mergeObjects: [
-                              "$$reply",
-                              {
-                                replyUser: {
-                                  $arrayElemAt: [
-                                    {
-                                      $filter: {
-                                        input: "$commentReplyUsers",
-                                        cond: {
-                                          $eq: ["$$this._id", "$$reply.userId"],
-                                        },
-                                      },
-                                    },
-                                    0,
-                                  ],
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
+    await post.updateOne({ $set: req.body },{new:true});
      
-      ]);
+      res.status(200).json(req.body.desc);
+    } else {
+      res.status(403).json("Authentication failed");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
-      const allPosts = postsWithComments.sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-console.log("alllll",allPosts)
-      res.status(200).json(allPosts);
+//update an existing comment
+export const updateComment = async (req, res) => {
+  const { userId,commentId,newComment } = req.body;
+  try {
+    const existingComment = await CommentModel.findById(commentId);
+    if (existingComment.userId.equals(mongoose.Types.ObjectId(userId))) {
+      await existingComment.updateOne({ $set: {comment :newComment}},{new:true});
+      res.status(200).json(req.body)
     } else {
       res.status(403).json("Authentication failed");
     }
@@ -229,7 +106,7 @@ export const deleteComment = async (req, res) => {
     const comment = await CommentModel.findById(id);
     if (comment.userId.equals(mongoose.Types.ObjectId(userId))) {
       await comment.deleteOne();
-
+      await CommentReplyModel.deleteMany({commentId:id})
       const user = await UserModel.findById(userId);
       const followingIds = user.following;
       followingIds.push(userId);

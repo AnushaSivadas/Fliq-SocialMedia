@@ -35,7 +35,7 @@ function App() {
           element={user ? <Navigate to="../home" /> : <Auth />}
         />
         <Route
-          path="/profile/:id"
+          path="/profile"
           element={user ? <Profile /> : <Navigate to="../auth" />}
         />
         <Route

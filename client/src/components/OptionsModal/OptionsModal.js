@@ -12,7 +12,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { updatePost } from "../../api/PostsRequests";
+import { updatePost } from "../../actions/PostsAction";
 
 function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
   const dispatch = useDispatch();
@@ -57,11 +57,9 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
     setOpens(false);
   };
 
-  const handleClose = () => {
-    setModalOpen(false);
-  };
+  
 
-  const handleChangepost = () => {
+  const handleChangepost = async() => {
     if (desc.trim() === "") {
       Swal.fire({
         icon: "error",
@@ -74,9 +72,9 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
       userId: user._id,
       desc: desc,
     };
-    // updatePost(post._id, postData);
-    updatePost(postData,post._id)
+    await dispatch(updatePost(postData,post._id))   
     setOpens(false);
+    setModalOpen(false)
   };
   const MAX_INPUT_LENGTH = 50;
   const handleInputChange = (event) => {
@@ -135,7 +133,7 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleCloses}>Cancel</Button>
                 <Button
                   onClick={handleChangepost}
                   disabled={desc.trim() === ""}

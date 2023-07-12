@@ -12,10 +12,11 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import OptionsModal from "../OptionsModal/OptionsModal";
 import ClipboardJS from "clipboard";
 import { logout } from "../../actions/AuthActions";
-
-
+import { useNavigate } from "react-router-dom"
+ 
 const Post = ({ data }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
@@ -38,6 +39,9 @@ const Post = ({ data }) => {
       clipboard.destroy();
     };
   }, []);
+  const navigateToProfile = (profileUserId) => {
+    navigate("/profile", { state : { profileUserId } });
+  };
 
   const handleLike = async () => {
     const response = await likePost(data._id, user._id);
@@ -96,20 +100,20 @@ const Post = ({ data }) => {
   } else {
     timeDifference = days + " days";
   }
-
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleText = () => {
     setIsExpanded(!isExpanded);
   };
-
   const truncatedText = isExpanded ? data.desc : data.desc.slice(0, 86);
   const shouldShowSeeMore = !isExpanded && data.desc.length > 86;
 
   return (
     <div className="Post">
       <div className="follower">
-        <div>
+        <div 
+          style={{cursor:"pointer"}}
+        onClick={ ()=>navigateToProfile(data.userId)}>
           <img
             src={
               data.userInfo.profilePicture
@@ -120,7 +124,7 @@ const Post = ({ data }) => {
             className="followerImage"
           />
           <div className="name">
-            <span>{data.userInfo.username}</span>
+          <span>{data.userInfo.username}</span>
             <span style={{ color: "gray", fontSize: "0.7rem" }}>
               {timeDifference} ago
             </span>
@@ -203,7 +207,7 @@ const Post = ({ data }) => {
         {data.comments.slice(0, 2).map((comment, id) => {
           return (
             <span>
-              <b>{comment.username}</b> {comment.comment}
+              <b>{comment.commentUser.username}</b> {comment.comment}
               <br></br>
             </span>
           );

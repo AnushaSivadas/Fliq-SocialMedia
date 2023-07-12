@@ -13,6 +13,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 3px 3px solid black;
+}
+
+.info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
 }
 
 .infoHead>div:hover{
@@ -22,6 +30,22 @@
 .logout-button{
     width: 7rem;
     height: 2rem;
-    margin-top: 6rem;
+    margin-top: 2rem;
     align-self: flex-end;
+}
+    /* .infoData > div:nth-of-type(4) >span:nth-of-type(2){
+        font-size: small;
+        font-weight: bold;
+        
+    } */
+
+.data{
+    font-weight: 500;
+}
+.email{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
 }

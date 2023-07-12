@@ -1,11 +1,12 @@
 import React, { useState ,useEffect} from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
 const User = ({ person }) => {
   const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(true);
   const [following, setFollowing] = useState(
     person.followers.includes(user._id)
@@ -13,7 +14,9 @@ const User = ({ person }) => {
   useEffect(() => {
     if(user._id===person._id) setVisible(false)
   }, []);
- 
+  const navigateToProfile = (profileUserId) => {
+    navigate("/profile", { state : { profileUserId } });
+  };
   
   const handleFollow = () => {
     following
@@ -23,7 +26,9 @@ const User = ({ person }) => {
   };
   return (
     <div className="follower">
-      <div>
+      <div 
+         onClick={ ()=>navigateToProfile(person._id)}
+         style={{cursor:"pointer"}}>
         <img
           src={
             person.profilePicture
@@ -34,12 +39,8 @@ const User = ({ person }) => {
           className="followerImage"
         />
         <div className="name">
-          <Link
-            to={`/profile/${person._id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
+          
             {person.username}
-          </Link>
           {/* <span></span> */}
           {/* <span>@{person.username}</span> */}
         </div>

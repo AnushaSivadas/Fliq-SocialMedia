@@ -15,6 +15,16 @@ export const followUser = (id, data) => async (dispatch) => {
   UserApi.followUser(id, data);
 };
 
+export const changeUsername = (userData) => async (dispatch) => {
+  dispatch({ type: "UPDATING_USERNAME_START" });
+  try {
+  const {data}= await UserApi.changeUsername(userData);
+  dispatch({ type: "UPDATING_USERNAME_SUCCESS", data:data });
+} catch (error) {
+  dispatch({ type: "UPDATING_USERNAME_FAIL" ,data:error.response.data});
+}
+};
+
 export const unfollowUser = (id, data) => async (dispatch) => {
   dispatch({ type: "UNFOLLOW_USER", data: id });
   UserApi.unfollowUser(id, data);

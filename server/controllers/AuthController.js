@@ -14,13 +14,15 @@ export const registerUser = async (req, res) => {
   const {username,email} = req.body
   try {
     // addition new
-    // const oldUser = await UserModel.findOne({ username });
-    const oldUser = await UserModel.findOne({ $or: [{ username }, { email }] });
-    console.log("olduser",oldUser)
+    const usernameUser = await UserModel.findOne({ username });
+    const emailUser = await UserModel.findOne({   email });
 
 
-    if (oldUser)
-      return res.status(400).json( "User already exists" );
+    if (usernameUser)
+      return res.status(400).json( "Username already exists" );
+
+      if (emailUser)
+      return res.status(400).json( "Email already exists" );
 
     // changed
     const user = await newUser.save();
@@ -59,7 +61,7 @@ export const loginUser = async (req, res) => {
       const validity = await bcrypt.compare(password, user.password);
 
       if (!validity) {
-        res.status(400).json("wrong password");
+        res.status(400).json("Wrong password");
       } else {
         const token = jwt.sign(
           { username: user.username, id: user._id ,email:user.email},

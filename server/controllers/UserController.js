@@ -79,9 +79,7 @@ export const getAllUsersDynamically = async (req, res) => {
 // udpate a user
 
 export const updateUser = async (req, res) => {
-  const id = req.params.id;
-  const { _id, currentUserAdmin, password } = req.body;
-
+  const { _id,  password ,id} = req.body;
   if (id === _id) {
     try {
       // if we also have to update password then password will be bcrypted again
@@ -99,7 +97,6 @@ export const updateUser = async (req, res) => {
         process.env.JWTKEY,
         { expiresIn: "1h" }
       );
-      console.log({ user, token });
       res.status(200).json({ user, token });
     } catch (error) {
       console.log("Error agya hy", error);
@@ -110,6 +107,28 @@ export const updateUser = async (req, res) => {
       .status(403)
       .json("Access Denied! You can update only your own Account.");
   }
+};
+
+export const changeUsername = async (req, res) => {
+  const { userId,username } = req.body;
+    try {
+      const oldUser = await UserModel.findOne({ username });
+
+      if (oldUser)
+        return res.status(400).json( "User already exists" );
+      const user = await UserModel.findByIdAndUpdate(userId, {username}, {
+        new: true,
+      });
+      const token = jwt.sign(
+        { username: user.username, id: user._id },
+        process.env.JWTKEY,
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ user, token });
+    } catch (error) {
+      console.log("Error agya hy", error);
+      res.status(500).json(error);
+    }
 };
 
 // Delete a user

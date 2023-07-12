@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 
 import './LogoSearch.css'
-import { UilSearch } from '@iconscout/react-unicons'
 const LogoSearch = () => {
   return (
     <div className="LogoSearch">
@@ -14,12 +13,7 @@ const LogoSearch = () => {
       <img src={Logo} alt="" />
     </Link>
 
-      {/* <div className="Search">
-          <input type="text" placeholder="#Explore"/>
-          <div className="s-icon">
-                <UilSearch/>
-          </div>
-      </div> */}
+      
       <div class="logo">
   <span class="text">Fliq</span>
   <span class="text media">Media</span>

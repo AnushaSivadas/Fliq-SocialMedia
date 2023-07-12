@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { UilEllipsisV,UilTrash } from "@iconscout/react-unicons";
+import { UilEllipsisV, UilTrash } from "@iconscout/react-unicons";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteComment, deleteCommentReply } from "../../actions/PostsAction";
+import { deleteComment, deleteCommentReply, updateComment } from "../../actions/PostsAction";
 import { uploadComment, uploadCommentReply } from "../../actions/UploadAction";
 import "./PostModal.css";
 import { Modal, useMantineTheme } from "@mantine/core";
@@ -15,8 +15,10 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
   const dispatch = useDispatch();
   const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
-  const commentDesc = useRef();
+  const commentDesc = useRef(null);
   const replyDesc = useRef(null);
+  const editDesc = useRef(null);
+
 
   const [anchorEls, setAnchorEls] = useState(
     Array(data.comments.length).fill(null)
@@ -24,12 +26,10 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
 
   const [showReplies, setShowReplies] = useState([]);
   const [replyIndex, setReplyIndex] = useState(null);
-  const [commentIndex, setCommentIndex] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
 
-
   const handleIconClick = (event, index) => {
-    
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = event.currentTarget;
     setAnchorEls(newAnchorEls);
@@ -41,16 +41,23 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
     );
     if (option === "delete") handleCommentDeletion(comment);
     else if (option === "reply") {
+      setEditIndex(null)
       setReplyIndex(index);
       setHighlightedIndex(index);
-     setTimeout(() => {
-      replyDesc.current.focus(); // Focus the input field after a small delay
-    }, 0);
-    } else if (option === "edit"){
-      setCommentIndex(index);
       setTimeout(() => {
-        commentDesc.current.focus(); // Focus the input field after a small delay
+        replyDesc.current.focus(); // Focus the input field after a small delay
       }, 0);
+      editDesc.current.value="";
+      replyDesc.current.value="";
+      commentDesc.current.value="";
+    } else if (option === "edit") {
+      setReplyIndex(null)
+      setEditIndex(index)
+      setHighlightedIndex(index);
+      setTimeout(() => {
+      editDesc.current.focus() // Focus the input field after a small delay
+      editDesc.current.value=comment.comment;
+    }, 0);
     }
   };
 
@@ -65,7 +72,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
       reply: replyDesc.current.value,
       commentId: data.comments[replyIndex]._id,
     };
-    dispatch(uploadCommentReply(replyComment))
+    dispatch(uploadCommentReply(replyComment));
     resetReplyShare();
     setReplyIndex(null);
     setHighlightedIndex(null);
@@ -77,9 +84,27 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
   };
 
   const cancelReply = () => {
+    replyDesc.current.value="";
     setReplyIndex(null);
     setHighlightedIndex(null);
+  };
 
+  const handleUpdateComment = () => {
+    const commentData={
+      userId: user._id,
+      commentId:data.comments[editIndex]._id,
+      newComment:editDesc.current.value
+    }
+    dispatch(updateComment(commentData,data._id));
+    resetEditShare();
+    setEditIndex(null);
+    setHighlightedIndex(null);
+  }
+
+  const cancelEdit = () => {
+    editDesc.current.value="";
+    setEditIndex(null);
+    setHighlightedIndex(null);
   };
 
   const handleCommentDeletion = (comment) => {
@@ -128,6 +153,9 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
   };
   const resetReplyShare = () => {
     replyDesc.current.value = "";
+  };
+  const resetEditShare = () => {
+    editDesc.current.value = "";
   };
 
   const handleToggleReplies = (index) => {
@@ -190,8 +218,12 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
           <h2 className="sectionTitle">Comments</h2>
           <div className="commentsList">
             {data.comments.map((comment, index) => (
-              <div className={`comment ${highlightedIndex === index ? "highlighted" : ""}`}
-              key={index}>
+              <div
+                className={`comment ${
+                  highlightedIndex === index ? "highlighted" : ""
+                }`}
+                key={index}
+              >
                 <div className="commentDetails">
                   <div className="commentOwner">
                     <img
@@ -236,18 +268,18 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                                 </div>
                                 <div className="commentText">{reply.reply}</div>
                               </div>
-                              {reply.replyUser._id === user._id && <div
-                                className="commentOptions"
-                                
-                              >
-                                <div style={{padding:"1rem"}}
-                                onClick={(event) =>
-                                  handleIconTrashClick(event, reply)
-                                }
-                                >
-                                <UilTrash size="13" />
-                                </div>  
-                              </div>}
+                              {reply.replyUser._id === user._id && (
+                                <div className="commentOptions">
+                                  <div
+                                    style={{ padding: "1rem" }}
+                                    onClick={(event) =>
+                                      handleIconTrashClick(event, reply)
+                                    }
+                                  >
+                                    <UilTrash size="13" />
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -255,12 +287,9 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                     </>
                   )}
                 </div>
-                <div
-                  className="commentOptions"
-                >
-                  <div onClick={(event) => handleIconClick(event, index)} 
->
-                  <UilEllipsisV size="20" />
+                <div className="commentOptions">
+                  <div onClick={(event) => handleIconClick(event, index)}>
+                    <UilEllipsisV size="20" />
                   </div>
                 </div>
                 <Menu
@@ -313,6 +342,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
           {user && (
             <>
               {replyIndex === null ? (
+                editIndex === null ?(
                 <>
                   <div className="commentInput">
                     <input
@@ -324,6 +354,23 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                     <button onClick={handleUpload}>Post</button>
                   </div>
                 </>
+                ):(
+                  <>
+                  <div className="commentInput">
+                    <input
+                      type="text"
+                      ref={editDesc}
+                      id="editInput"
+                      maxLength={20}
+                      placeholder="Edit comment..."
+                    />
+                    <button onClick={handleUpdateComment}>Update</button>
+                  </div>
+                  <div className="commentInput cancelBtn">
+                    <button onClick={cancelEdit}>Cancel</button>
+                  </div>
+                </>
+                )
               ) : (
                 <>
                   <div className="commentInput">
@@ -336,9 +383,8 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                     <button onClick={handleUploadReply}>Reply</button>
                   </div>
                   <div className="commentInput cancelBtn">
-
-                    <button  onClick={cancelReply}>Cancel</button>
-                    </div>
+                    <button onClick={cancelReply}>Cancel</button>
+                  </div>
                 </>
               )}
             </>
