@@ -25,6 +25,26 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const searchAllUsers = async (req, res) => {
+  try {
+    let users = await UserModel.find({
+      $or: [
+        { username: { $regex: new RegExp(req.query.search), $options: "i" } },
+        { firstname: { $regex: new RegExp(req.query.search), $options: "i" } },
+        { lastname: { $regex: new RegExp(req.query.search), $options: "i" } },
+      ],
+    });
+    users = users.map((user) => {
+      const { password, ...otherDetails } = user._doc;
+      return { ...otherDetails };
+    });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error);
+  }
+};
+
 export const getBlockStatus = async (req, res, next) => {
   const userId = req.params.userId;
 
@@ -33,7 +53,7 @@ export const getBlockStatus = async (req, res, next) => {
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Assuming the user model has a property named "isBlocked"
@@ -42,8 +62,8 @@ export const getBlockStatus = async (req, res, next) => {
     // Return the block status
     res.json({ isBlocked });
   } catch (error) {
-    console.error('Error retrieving block status:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error retrieving block status:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -79,7 +99,7 @@ export const getAllUsersDynamically = async (req, res) => {
 // udpate a user
 
 export const updateUser = async (req, res) => {
-  const { _id,  password ,id} = req.body;
+  const { _id, password, id } = req.body;
   if (id === _id) {
     try {
       // if we also have to update password then password will be bcrypted again
@@ -110,25 +130,28 @@ export const updateUser = async (req, res) => {
 };
 
 export const changeUsername = async (req, res) => {
-  const { userId,username } = req.body;
-    try {
-      const oldUser = await UserModel.findOne({ username });
+  const { userId, username } = req.body;
+  try {
+    const oldUser = await UserModel.findOne({ username });
 
-      if (oldUser)
-        return res.status(400).json( "User already exists" );
-      const user = await UserModel.findByIdAndUpdate(userId, {username}, {
+    if (oldUser) return res.status(400).json("User already exists");
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { username },
+      {
         new: true,
-      });
-      const token = jwt.sign(
-        { username: user.username, id: user._id },
-        process.env.JWTKEY,
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({ user, token });
-    } catch (error) {
-      console.log("Error agya hy", error);
-      res.status(500).json(error);
-    }
+      }
+    );
+    const token = jwt.sign(
+      { username: user.username, id: user._id },
+      process.env.JWTKEY,
+      { expiresIn: "1h" }
+    );
+    res.status(200).json({ user, token });
+  } catch (error) {
+    console.log("Error agya hy", error);
+    res.status(500).json(error);
+  }
 };
 
 // Delete a user

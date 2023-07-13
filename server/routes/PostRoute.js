@@ -4,7 +4,7 @@ import authMiddleWare from '../middleware/AuthMiddleware.js'
 const router = express.Router()
 
 router.post('/',createPost)
-router.get('/:id', getPost)
+router.get('/singlePost/:id', getPost)
 router.put('/updatePost/:id', updatePost)
 router.put('/updateComment', updateComment)
 router.post('/report',reportPost)

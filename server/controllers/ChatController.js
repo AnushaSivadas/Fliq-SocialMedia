@@ -40,8 +40,15 @@ export const getFollowers = async (req, res) => {
     const { userId } = req.params;
    
     let users = await UserModel.find({
+      
       $and: [
-        { username: { $regex: new RegExp(req.query.search), $options: "i" } },
+        {
+          $or:[ 
+           {username: { $regex: new RegExp(req.query.search), $options: "i" } },
+           {firstname: { $regex: new RegExp(req.query.search), $options: "i" } },
+           {lastname: { $regex: new RegExp(req.query.search), $options: "i" } }
+          ]
+        },
         { followers: { $in: [userId] } } 
       ]
     });

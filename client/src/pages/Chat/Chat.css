@@ -68,6 +68,19 @@
   font-size: 20px;
 }
 
+.shareButton{
+  border-radius: 100%;
+  border: none;
+  background-color: rgb(7, 87, 32);
+  color: white;
+  /* padding-left: 8px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
 
 @media screen and (max-width: 768px) {
  .Chat {

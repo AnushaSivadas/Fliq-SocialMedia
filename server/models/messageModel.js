@@ -11,6 +11,9 @@ const MessageSchema = new mongoose.Schema(
     text: {
       type: String,
     },
+    desc: {
+      type: String,
+    },
     image: String,
     video:String
 

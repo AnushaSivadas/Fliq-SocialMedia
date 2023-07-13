@@ -34,11 +34,139 @@ export const createPost = async (req, res) => {
 // get a post
 
 export const getPost = async (req, res) => {
-  const id = req.params.id;
-
+  const postId = req.params.id;
   try {
-    const post = await PostModel.findById(id);
-
+    // const post = await PostModel.findById(id);
+    const post = await PostModel.aggregate([
+      {
+        $addFields: {
+          userId: { $toObjectId: "$userId" },
+        },
+      },
+      {
+        $match: {
+          _id:mongoose.Types.ObjectId(postId)
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      {
+        $unwind: "$userInfo",
+      },
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "postId",
+          as: "comments",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "comments.userId",
+          foreignField: "_id",
+          as: "commentUsers",
+        },
+      },
+      {
+        $lookup: {
+          from: "commentreplies",
+          localField: "comments._id",
+          foreignField: "commentId",
+          as: "commentReplies",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "commentReplies.userId",
+          foreignField: "_id",
+          as: "commentReplyUsers",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          desc: 1,
+          likes: 1,
+          image: 1,
+          video: 1,
+          status: 1,
+          createdAt: 1,
+          "userInfo.username": 1,
+          "userInfo.profilePicture": 1,
+          comments: {
+            $map: {
+              input: "$comments",
+              as: "comment",
+              in: {
+                $mergeObjects: [
+                  "$$comment",
+                  {
+                    commentUser: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: "$commentUsers",
+                            cond: { $eq: ["$$this._id", "$$comment.userId"] },
+                          },
+                        },
+                        0,
+                      ],
+                    },
+                  },
+                  { _id: "$$comment._id" },
+                  {
+                    commentReplies: {
+                      $map: {
+                        input: {
+                          $filter: {
+                            input: "$commentReplies",
+                            cond: {
+                              $eq: ["$$this.commentId", "$$comment._id"],
+                            },
+                          },
+                        },
+                        as: "reply",
+                        in: {
+                          $mergeObjects: [
+                            "$$reply",
+                            {
+                              replyUser: {
+                                $arrayElemAt: [
+                                  {
+                                    $filter: {
+                                      input: "$commentReplyUsers",
+                                      cond: {
+                                        $eq: ["$$this._id", "$$reply.userId"],
+                                      },
+                                    },
+                                  },
+                                  0,
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+   
+    ]);
     res.status(200).json(post);
   } catch (error) {
     res.status(500).json(error);

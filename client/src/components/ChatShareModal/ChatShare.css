@@ -1,0 +1,40 @@
+.shareModal{
+  min-height: 50vh !important;
+}
+
+.shareModal .conversation:hover {
+  cursor: default
+}
+
+.share-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.share-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: rgb(239, 20, 20) 0.3s ease;
+}
+
+.share-button:hover {
+  opacity: 0.8;
+}
+
+.share-icon {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.share-label {
+  font-size: 14px;
+  color: rgb(3, 3, 3);
+}
+

@@ -30,6 +30,7 @@
     "react-file-base64": "^1.0.3",
     "react-icons": "^4.10.1",
     "react-input-emoji": "^4.1.0",
+    "react-link-preview": "^0.1.3",
     "react-redux": "^8.0.2",
     "react-router-dom": "6",
     "react-scripts": "5.0.0",

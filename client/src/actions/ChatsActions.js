@@ -11,3 +11,15 @@ export const getChats = (id) => async (dispatch) => {
       dispatch({ type: "RETREIVING_FAIL" });
     }
   };
+
+  export const createChat = (chatData) => async (dispatch) => {
+    dispatch({ type: "RETREIVING_START" });
+    try {
+      console.log("chat entry")
+      const { data } = await ChatsApi.createChat(chatData);
+    dispatch({ type: "SAVE_USER", data: data });
+} catch (error) {
+      console.log(error);
+      dispatch({ type: "RETREIVING_FAIL" });
+    }
+  };

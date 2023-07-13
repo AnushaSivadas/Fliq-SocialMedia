@@ -1,5 +1,5 @@
 import express from 'express'
-import { deleteUser, followUser,getBlockStatus, getAllUsers, getAllUsersDynamically, getUser, unfollowUser, updateUser,followersList,followingList, changeUsername } from '../controllers/UserController.js'
+import { deleteUser, followUser,getBlockStatus, getAllUsers, getAllUsersDynamically, getUser, unfollowUser, updateUser,followersList,followingList, changeUsername, searchAllUsers } from '../controllers/UserController.js'
 import authMiddleWare from '../middleware/AuthMiddleware.js';
 
 const router = express.Router()
@@ -7,6 +7,7 @@ const router = express.Router()
 router.get('/:id', getUser);
 router.get('/:id/block-status', getBlockStatus);
 router.get('/',getAllUsers)
+router.get('/searchAllUsers/:id',searchAllUsers)
 router.put('/changeUsername',changeUsername)
 router.put('/update',authMiddleWare, updateUser)
 router.delete('/:id',authMiddleWare, deleteUser)

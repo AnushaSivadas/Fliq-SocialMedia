@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProfileCard.css";
 import Swal from "sweetalert2";
-// import Cover from "../../img/cover.jpg";
-// import Profile from "../../img/profileImg.jpg";
-import { Link, useLocation,useNavigate } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";

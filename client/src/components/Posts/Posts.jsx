@@ -17,7 +17,7 @@ const Posts = () => {
 
   useEffect(() => {
     dispatch(getTimelinePosts(user._id));
-  }, []);
+  }, [user]);
 
   posts = posts.filter((post) => post.status);
 

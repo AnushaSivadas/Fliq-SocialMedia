@@ -11,8 +11,8 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { FaVideo, FaPhone } from "react-icons/fa";
 import * as UploadApi from "../../api/UploadRequest";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   const [userData, setUserData] = useState(null);
@@ -58,8 +58,8 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   const handleVideoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      
-      setSelectedVideo(file);    
+
+      setSelectedVideo(file);
 
       openModal();
     }
@@ -86,13 +86,14 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   };
 
   const handleOptionClick = (option) => {
-   if(option==="Image"){
-      imageRef.current.click()
-   }else if(option==="Video"){
-    videoRef.current.click();
-   }
+    if (option === "Image") {
+      imageRef.current.click();
+    } else if (option === "Video") {
+      videoRef.current.click();
+    }
     setAnchorEl(null); // Close the menu
   };
+
   // fetching data for header
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== currentUser);
@@ -137,7 +138,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
       const data = {
         senderId: currentUser,
         receiverId: chat.members.find((id) => id !== currentUser),
-        text: newMessage,
       };
       const response = await createChat(data);
       chat = response.data;
@@ -169,7 +169,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
       let data = {
         senderId: currentUser,
         receiverId: chat.members.find((id) => id !== currentUser),
-        // text: newMessage,
       };
       if (newPreviewMessage) {
         data.text = newPreviewMessage;
@@ -180,7 +179,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
     }
     let message = {
       senderId: currentUser,
-
       chatId: chat._id,
     };
     if (newPreviewMessage) {
@@ -228,7 +226,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
       let data = {
         senderId: currentUser,
         receiverId: chat.members.find((id) => id !== currentUser),
-        // text: newMessage,
       };
       if (newPreviewMessage) {
         data.text = newPreviewMessage;
@@ -239,7 +236,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
     }
     let message = {
       senderId: currentUser,
-
       chatId: chat._id,
     };
     if (newPreviewMessage) {
@@ -281,7 +277,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   };
 
   const navigateToProfile = (profileUserId) => {
-    navigate("/profile", { state : { profileUserId } });
+    navigate("/profile", { state: { profileUserId } });
   };
 
   // Receive Message from parent component
@@ -295,6 +291,23 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   const imageRef = useRef();
   const videoRef = useRef();
 
+  // Function to convert URLs in text to clickable links
+  // Function to convert URLs in text to clickable links
+const formatTextWithLinks = (text,desc) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, (url) => {
+    
+      return `
+        <div>
+          <b style="color: black;">${desc}</b>
+          <a href="${url}" target="_self" rel="noopener noreferrer" style="color: black;"  >${url}</a>
+        </div>
+      `;
+    // }
+  });
+};
+
+
   return (
     <>
       <div className="ChatBox-container">
@@ -303,9 +316,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
             {/* chat-header */}
             <div className="chat-header">
               <div className="follower">
-                <div 
-        onClick={ ()=>navigateToProfile(userData._id)}
-        >
+                <div onClick={() => navigateToProfile(userData._id)}>
                   <img
                     src={
                       userData?.profilePicture
@@ -321,8 +332,11 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                     <span>
                       {userData?.firstname} {userData?.lastname}
                     </span>
-                    <span style={{marginLeft:"1rem",marginTop:"3px",cursor:"pointer"}}>{userData?.username}</span>
-
+                    <span
+                      style={{ marginLeft: "0.2rem", marginTop: "3px", cursor: "pointer" }}
+                    >
+                      {userData?.username}
+                    </span>
                   </div>
                 </div>
                 <div className="chat-header-icons">
@@ -350,7 +364,6 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                         : "message"
                     }
                   >
-                    {" "}
                     {message.image && (
                       <img
                         src={message.image}
@@ -366,15 +379,22 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                         controls
                       />
                     )}
-                    {message.text && <span>{message.text}</span>}
-                    <span className="chatTime">{format(message.createdAt)}</span>
+                    {message.text && (
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: formatTextWithLinks(message.text,message.desc),
+                        }}
+                      ></span>
+                    )}
+                    <span className="chatTime">
+                      {format(message.createdAt)}
+                    </span>
                   </div>
                 </>
               ))}
             </div>
             {/* chat-sender */}
             <div className="chat-sender">
-              {/* <div onClick={() => imageRef.current.click()}>+</div> */}
               <div className={`plus-icon`} onClick={handlePlusIconClick}>
                 +
               </div>
@@ -391,13 +411,19 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                   horizontal: "center",
                 }}
               >
-                <MenuItem onClick={() => handleOptionClick("Image")}>Image</MenuItem>
-                <MenuItem onClick={() => handleOptionClick("Video")}>Video</MenuItem>
+                <MenuItem onClick={() => handleOptionClick("Image")}>
+                  Image
+                </MenuItem>
+                <MenuItem onClick={() => handleOptionClick("Video")}>
+                  Video
+                </MenuItem>
               </Menu>
               <InputEmoji value={newMessage} onChange={handleChange} />
-              <div className="send-button button" onClick={handleSend}>
-                Send
-              </div>
+              <div
+                className="send-button button"
+                onClick={handleSend}
+                dangerouslySetInnerHTML={{ __html: "Send" }}
+              ></div>
               <input
                 type="file"
                 name=""
@@ -407,7 +433,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                 ref={imageRef}
                 onChange={handleImageChange}
               />
-            <input
+              <input
                 type="file"
                 name=""
                 id=""
@@ -434,18 +460,14 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                     className="selected-image"
                   />
                   <div className="caption-container">
-                    {
-                     
-                      <InputEmoji
-                        value={newPreviewMessage}
-                        onChange={handlePreviewChange}
-                      />
-                    }
+                    <InputEmoji
+                      value={newPreviewMessage}
+                      onChange={handlePreviewChange}
+                    />
                     <button className="send-button" onClick={handleImageSend}>
                       Send
                     </button>
                   </div>
-                 
                 </div>
               </div>
             )}
@@ -467,25 +489,21 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
                     controls
                   />
                   <div className="caption-container">
-                    {
-                     
-                      <InputEmoji
-                        value={newPreviewMessage}
-                        onChange={handlePreviewChange}
-                      />
-                    }
+                    <InputEmoji
+                      value={newPreviewMessage}
+                      onChange={handlePreviewChange}
+                    />
                     <button className="send-button" onClick={handleVideoSend}>
                       Send
                     </button>
                   </div>
-                 
                 </div>
               </div>
             )}
           </>
         ) : (
           <span className="chatbox-empty-message">
-            Tap on a chat to start conversation...
+            Tap on a chat to start a conversation...
           </span>
         )}
       </div>

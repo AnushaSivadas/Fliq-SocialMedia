@@ -1,7 +1,6 @@
 import MessageModel from "../models/messageModel.js";
 export const addMessage = async (req, res) => {
-  console.log("req",req.body)
-  const { chatId, senderId, text ,image,video} = req.body;
+  const { chatId, senderId, text ,image,video,desc} = req.body;
 
  
   const message = new MessageModel({
@@ -9,7 +8,7 @@ export const addMessage = async (req, res) => {
     senderId,
     text,
     image,
-    video
+    video,desc
   });
 
   try {

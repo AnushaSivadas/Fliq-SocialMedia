@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth/Auth";
+import SinglePost from "./pages/SinglePost/SinglePost";
 import Profile from "./pages/Profile/Profile";
 import Users from './components/FollowersList/FollowersList'
 import { useSelector } from "react-redux";
@@ -54,6 +55,10 @@ function App() {
         <Route
           path="/users"
           element={user ? <Users /> : <Navigate to="../auth" />}
+        />
+        <Route
+          path="/getPost/:id"
+          element={user ? <SinglePost/> : <Navigate to="../auth" />}
         />
       </Routes>
     </div>

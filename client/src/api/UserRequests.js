@@ -10,3 +10,5 @@ export const unfollowUser = (id, data) => API.put(`/user/${id}/unfollow`, data);
 export const getFollowers = (id) => API.get(`/user/${id}/followers`);
 export const getFollowing = (id) => API.get(`/user/${id}/following`);
 export const getFollowedUserSearchData = (search, id) =>  API.get(`/chat/getFollowers/${id}?search=${search}`);
+export const searchAllUsers = (search,id) =>  API.get(`/user/searchAllUsers/${id}?search=${search}`);
+

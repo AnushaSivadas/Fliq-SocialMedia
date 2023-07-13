@@ -13,6 +13,7 @@ import OptionsModal from "../OptionsModal/OptionsModal";
 import ClipboardJS from "clipboard";
 import { logout } from "../../actions/AuthActions";
 import { useNavigate } from "react-router-dom"
+import ChatShareModal from "../ChatShareModal/ChatShareModal";
  
 const Post = ({ data }) => {
   const dispatch = useDispatch();
@@ -23,6 +24,10 @@ const Post = ({ data }) => {
 
   const [modalOpened, setModalOpened] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [chatShareOpen, setChatShareOpen] = useState(false);
+
+
+
 
   const iconRef = useRef(null);
   const copyButtonRef = useRef(null);
@@ -33,8 +38,6 @@ const Post = ({ data }) => {
 
   useEffect(() => {
     const clipboard = new ClipboardJS(copyButtonRef.current);
-
-    // Clean up the clipboard instance when the component unmounts
     return () => {
       clipboard.destroy();
     };
@@ -171,11 +174,9 @@ const Post = ({ data }) => {
         <img src={Comment} alt=""style={{cursor:"pointer"}} onClick={() => {data.comments.length>0?setModalOpened(true):setModalOpened(false)}}/>
         <button
           ref={copyButtonRef}
-          data-clipboard-text = {`https://localhost:3000/post/${data._id}`}
-          onClick={() => {
-            // Optional: Provide visual feedback to the user
-            alert("Link copied!");
-          }}
+          data-clipboard-text = {`http://localhost:3000/getPost/${data._id}`}
+          onClick={() => setChatShareOpen(true)}
+
           style={{
             background: "none",
             border: "none",
@@ -186,6 +187,12 @@ const Post = ({ data }) => {
         >
           <img src={Share} alt="" />
         </button>
+        <ChatShareModal
+        chatShareOpen={chatShareOpen}
+        setChatShareOpen={setChatShareOpen}
+        url={`http://localhost:3000/getPost/${data._id}`}
+        data={data}
+      />
       </div>
       <span style={{ color: "var(--gray)", fontSize: "12px" }}>
         {likes} likes
