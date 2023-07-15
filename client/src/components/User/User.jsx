@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
 const User = ({ person }) => {
@@ -12,8 +12,10 @@ const User = ({ person }) => {
     person.followers.includes(user._id)
   );
   useEffect(() => {
-    if(user._id===person._id) setVisible(false)
-  }, []);
+    if(user._id===person._id) setVisible(false);
+    // setFollowing(person.followers.includes(user._id));
+  }, [user]);
+
   const navigateToProfile = (profileUserId) => {
     navigate("/profile", { state : { profileUserId } });
   };

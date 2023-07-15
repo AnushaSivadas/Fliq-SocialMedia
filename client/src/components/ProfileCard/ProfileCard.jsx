@@ -168,6 +168,7 @@ const ProfileCard = ({ location }) => {
               width="2rem"
               height="1rem"
               onClick={handleUsernameEdit}
+              className="UilPen"
             />
             <Dialog open={opens} onClose={handleCloses}>
               <DialogTitle>Edit Username</DialogTitle>

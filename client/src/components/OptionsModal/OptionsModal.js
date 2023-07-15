@@ -115,8 +115,8 @@ function OptionsModal({ modalOpen, setModalOpen, iconRef, post, userId }) {
               <DialogTitle>Edit Post</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  <p className="text-red-500">
-                    *Publishing this revision wil overwrite its orginal
+                  <p className="text">
+                    Change the description of the post as needed                  
                   </p>
                 </DialogContentText>
                 <TextField

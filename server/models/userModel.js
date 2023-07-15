@@ -34,6 +34,10 @@
         type: String,
         unique: true,
     },
+    verified:{
+      type:Boolean,
+      default:false,
+    },
     profilePicture: String,
       coverPicture: String,
       about: String,
