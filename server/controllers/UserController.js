@@ -3,9 +3,7 @@ import mongoose from "mongoose";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import dotenv from "dotenv";
+
 
 // Get a User
 export const getUser = async (req, res) => {
@@ -148,6 +146,47 @@ export const changeUsername = async (req, res) => {
       { expiresIn: "1h" }
     );
     res.status(200).json({ user, token });
+  } catch (error) {
+    console.log( error);
+    res.status(500).json(error);
+  }
+};
+export const changePassword = async (req, res) => {
+  const { userId, existing , newPass , confirm } = req.body;
+  try {
+    const user = await UserModel.findById(userId);
+    if(user.password){
+      const validity = await bcrypt.compare(existing, user.password);
+      if(!validity)
+        res.status(200).json("Incorrect password");
+      else{
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(newPass, salt);
+        await UserModel.findByIdAndUpdate(
+          userId,
+          { password:hashedPass },
+          {
+            new: true,
+          }
+        );
+        
+        res.status(200).json("Successfully Changed");
+      }
+    }
+    else{
+      const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(newPass, salt);
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { password:hashedPass },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json("Successfully Created");
+
+    }
+  
   } catch (error) {
     console.log("Error agya hy", error);
     res.status(500).json(error);

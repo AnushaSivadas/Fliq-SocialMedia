@@ -8,7 +8,7 @@ import { deleteComment, deleteCommentReply, updateComment } from "../../actions/
 import { uploadComment, uploadCommentReply } from "../../actions/UploadAction";
 import "./PostModal.css";
 import { Modal, useMantineTheme } from "@mantine/core";
-// import InputEmoji from "react-input-emoji";
+// import InputEmoji from "react-input-emoji";w
 
 function PostModal({ modalOpened, setModalOpened, data, time }) {
   const theme = useMantineTheme();

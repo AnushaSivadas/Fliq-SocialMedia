@@ -11,13 +11,13 @@
 .Post>img{
     width: 100%;
     max-height:40rem;
-    object-fit: cover;
+    object-fit: fill;
     border-radius: 0.5rem;
 }
 .Post>video{
     width: 100%;
     max-height:40rem;
-    object-fit: cover;
+    object-fit: fill;
     border-radius: 0.5rem;
 }
 .Post>div>input{

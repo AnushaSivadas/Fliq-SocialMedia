@@ -2,12 +2,12 @@ import React, { useState, useRef } from "react";
 import "./PostShare.css";
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
-import { UilLocationPoint } from "@iconscout/react-unicons";
-import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost,uploadVideo } from "../../actions/UploadAction";
 import * as UploadApi from "../../api/UploadRequest";
+import InputEmoji from "react-input-emoji";
+
 
 import Swal from "sweetalert2";
 
@@ -19,7 +19,9 @@ const PostShare = () => {
   const [video, setVideo] = useState(null);
   const desc = useRef();
   const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  const [inputValue, setInputValue] = useState("");
+  const MAX_INPUT_LENGTH = 25;
+  
   // handle Video Change
   const onVideoChange = (event) => {
     const file = event.target.files[0];
@@ -60,7 +62,7 @@ const PostShare = () => {
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    if (desc.current.value.trim() === "") {
+    if (inputValue.trim() === "") {
       Swal.fire({
         icon: "error",
         title: "Empty Description",
@@ -72,7 +74,7 @@ const PostShare = () => {
     //post data
     const newPost = {
       userId: user._id,
-      desc: desc.current.value,
+      desc: inputValue,
     };
 
     // if there is an image with post
@@ -113,15 +115,15 @@ const PostShare = () => {
   const resetShare = () => {
     setImage(null);
     setVideo(null);
-    desc.current.value = "";
+    // desc.current.value = "";
+    setInputValue("");
     setInputValue("");
   };
-  const [inputValue, setInputValue] = useState("");
-  const MAX_INPUT_LENGTH = 25;
 
   // handle input change
-  const handleInputChange = (event) => {
-    const value = event.target.value;
+  const handleInputChange = (inputValue) => {
+    // const value = event.target.value;
+    const value = inputValue
     if (value.length <= MAX_INPUT_LENGTH) {
       setInputValue(value);
     }
@@ -137,8 +139,16 @@ const PostShare = () => {
         alt="Profile"
       />
       <div>
-        <input
+        {/* <input
           type="text"
+          placeholder="What's happening?"
+          required
+          ref={desc}
+          value={inputValue}
+          maxLength={MAX_INPUT_LENGTH}
+          onChange={handleInputChange}
+        /> */}
+        <InputEmoji 
           placeholder="What's happening?"
           required
           ref={desc}

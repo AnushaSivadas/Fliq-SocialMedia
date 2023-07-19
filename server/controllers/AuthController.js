@@ -8,7 +8,6 @@ import crypto from "crypto"
 
 // Register new user
 export const registerUser = async (req, res) => {
-  console.log("haii");
 
   const salt = await bcrypt.genSalt(10);
   const hashedPass = await bcrypt.hash(req.body.password, salt);
