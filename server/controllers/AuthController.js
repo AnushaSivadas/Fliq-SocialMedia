@@ -2,9 +2,6 @@ import UserModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
-import TokenModel from "../models/tokenModel.js";
-import { sendEmail } from "../utils/sendEmail.js";
-import crypto from "crypto"
 
 // Register new user
 export const registerUser = async (req, res) => {
@@ -83,9 +80,11 @@ export const googleRegister = async (req, res) => {
 
   try {
     let decoded = await jwt_decode(credential);
-
+  console.log("credential",decoded)
     const { given_name, family_name, email, sub, picture } = decoded;
     const user = await UserModel.findOne({ googleId: sub });
+  console.log("user",user)
+
     if (user) {
       if (user.isBlocked) {
         res.status(404).json("User is Blocked");

@@ -30,7 +30,7 @@ const Post = ({data,index}) => {
       <TableCell component="th" scope="row">
        {index}.
       </TableCell>
-      <TableCell align="left">{data.userInfo.username}</TableCell>
+      <TableCell align="left">{data.userInfo.username || data.userInfo.firstname }</TableCell>
       <TableCell align="left" >
       <img
             src={
