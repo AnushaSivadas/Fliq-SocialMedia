@@ -36,10 +36,10 @@ mongoose
   .catch((error) => console.log(`${error} did not connect`));
 
 
-app.use('/auth', AuthRoute);
-app.use('/user', UserRoute)
-app.use('/posts', PostRoute)
-app.use('/upload', UploadRoute)
-app.use('/chat', ChatRoute)
-app.use('/message', MessageRoute)
-app.use('/admin',AdminRoute)
+app.use('/api/auth', AuthRoute);
+app.use('/api/user', UserRoute)
+app.use('/api/posts', PostRoute)
+app.use('/api/upload', UploadRoute)
+app.use('/api/chat', ChatRoute)
+app.use('/api/message', MessageRoute)
+app.use('/api/admin',AdminRoute)
