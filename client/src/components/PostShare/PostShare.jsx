@@ -7,8 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost,uploadVideo } from "../../actions/UploadAction";
 import * as UploadApi from "../../api/UploadRequest";
 import InputEmoji from "react-input-emoji";
-
-
+import defaultProfile from '../../img/defaultProfile.png'
 import Swal from "sweetalert2";
 
 const PostShare = () => {
@@ -18,7 +17,6 @@ const PostShare = () => {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const desc = useRef();
-  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
   const [inputValue, setInputValue] = useState("");
   const MAX_INPUT_LENGTH = 25;
   
@@ -134,7 +132,7 @@ const PostShare = () => {
         src={
           user.profilePicture
             ? user.profilePicture
-            : serverPublic + "defaultProfilee.png"
+            : defaultProfile
         }
         alt="Profile"
       />

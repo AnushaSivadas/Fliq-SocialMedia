@@ -5,6 +5,7 @@ import { useState } from "react";
 import { blockUser } from "../../api/UserRequests";
 import '../Table/Table.css'
 import Swal from 'sweetalert2';
+import defaultProfile from '../../img/defaultProfile.png'
 
 const makeStyle=(status)=>{
     if(status)
@@ -24,7 +25,6 @@ const makeStyle=(status)=>{
   }
 
 const User = ({person,index}) => {
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const [blockStatus,setBlockStatus]=useState(person.isBlocked)
 
   const handleBlock=()=>{
@@ -72,7 +72,7 @@ const formattedDate = `${date}/${month}/${year}`;
             src={
               person.profilePicture
                 ?  person.profilePicture
-                : publicFolder + "defaultProfilee.png"
+                : defaultProfile
             }
             alt="profile"
             className="postImage"

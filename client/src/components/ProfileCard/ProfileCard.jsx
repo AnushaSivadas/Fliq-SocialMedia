@@ -16,11 +16,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { changeUsername } from "../../actions/UserAction";
+import defaultProfile from '../../img/defaultProfile.png'
+import defaultCover from '../../img/defaultCover.jpg'
+
+
 
 const ProfileCard = ({ location }) => {
   let { user } = useSelector((state) => state.authReducer.authData);
   const posts = useSelector((state) => state.postReducer.posts);
-  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
   const [profileUser, setProfileUser] = useState(user);
   const [following, setFollowing] = useState(false);
   const dispatch = useDispatch();
@@ -147,7 +150,7 @@ const ProfileCard = ({ location }) => {
           src={
             profileUser.coverPicture
               ? profileUser.coverPicture
-              : serverPublic + "defaultCoverr.jpg"
+              : defaultCover
           }
           alt="CoverImage"
         />
@@ -155,7 +158,7 @@ const ProfileCard = ({ location }) => {
           src={
             profileUser.profilePicture
               ? profileUser.profilePicture
-              : serverPublic + "defaultProfilee.png"
+              : defaultProfile
           }
           alt="ProfileImage"
         />

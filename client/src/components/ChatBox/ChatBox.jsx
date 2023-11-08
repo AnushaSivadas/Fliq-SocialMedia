@@ -13,6 +13,7 @@ import { FaVideo, FaPhone } from "react-icons/fa";
 import * as UploadApi from "../../api/UploadRequest";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import defaultProfile from '../../img/defaultProfile.png'
 
 const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   const [userData, setUserData] = useState(null);
@@ -321,8 +322,7 @@ const formatTextWithLinks = (text,desc) => {
                     src={
                       userData?.profilePicture
                         ? userData.profilePicture
-                        : process.env.REACT_APP_PUBLIC_FOLDER +
-                          "defaultProfilee.png"
+                        : defaultProfile
                     }
                     alt="Profile"
                     className="followerImage"

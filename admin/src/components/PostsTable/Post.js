@@ -1,7 +1,7 @@
 import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-
+import defaultProfile from '../../img/defaultProfile.png'
 
 const makeStyle=(status)=>{
   if(!status)
@@ -20,7 +20,6 @@ const makeStyle=(status)=>{
 }
 
 const Post = ({data,index}) => {
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
 
   return (
     <TableRow
@@ -36,7 +35,7 @@ const Post = ({data,index}) => {
             src={
               data.image
                 ? data.image
-                : publicFolder + "defaultProfilee.png"
+                : defaultProfile
             }
             alt="post"
             className="postImage"

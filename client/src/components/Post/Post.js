@@ -14,12 +14,13 @@ import ClipboardJS from "clipboard";
 import { logout } from "../../actions/AuthActions";
 import { useNavigate } from "react-router-dom"
 import ChatShareModal from "../ChatShareModal/ChatShareModal";
+import defaultProfile from '../../img/defaultProfile.png'
+
  
 const Post = ({ data }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
 
   const [modalOpened, setModalOpened] = useState(false);
@@ -121,7 +122,7 @@ const Post = ({ data }) => {
             src={
               data.userInfo.profilePicture
                 ? data.userInfo.profilePicture
-                : publicFolder + "defaultProfilee.png"
+                : defaultProfile
             }
             alt="profile"
             className="followerImage"

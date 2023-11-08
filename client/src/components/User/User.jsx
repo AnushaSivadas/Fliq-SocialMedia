@@ -2,8 +2,9 @@ import React, { useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
+import defaultProfile from '../../img/defaultProfile.png'
+
 const User = ({ person }) => {
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const User = ({ person }) => {
           src={
             person.profilePicture
               ? person.profilePicture
-              : publicFolder + "defaultProfilee.png"
+              : defaultProfile
           }
           alt="profile"
           className="followerImage"

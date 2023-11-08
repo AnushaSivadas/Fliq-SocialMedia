@@ -7,11 +7,11 @@ import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
+import defaultProfile from '../../img/defaultProfile.png'
 
 
 import "./ReportedPostModal.css";
 function ReportedPostModal({ reportModalOpened, setReportModalOpened, data }) {
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const theme = useMantineTheme();
 
@@ -51,7 +51,8 @@ report.formattedDate = `${date}/${month}/${year}`;
               src={
                 data.user.profilePicture
                   ? data.user.profilePicture
-                  : publicFolder + "defaultProfilee.png"}
+                  :defaultProfile
+                }
               alt="profile"
               className="followerImage"
             />

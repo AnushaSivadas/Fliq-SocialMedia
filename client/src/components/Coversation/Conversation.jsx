@@ -4,6 +4,7 @@ import { getUser } from "../../api/UserRequests";
 import { findChat, createChat } from "../../api/ChatRequests";
 import { addMessage } from "../../api/MessageRequests";
 import Swal from "sweetalert2";
+import defaultProfile from '../../img/defaultProfile.png'
 
 
 const Conversation = ({
@@ -100,7 +101,7 @@ const Conversation = ({
             src={
               userData?.profilePicture
                 ? userData.profilePicture
-                : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfilee.png"
+                : defaultProfile
             }
             alt="Profile"
             className="followerImage"

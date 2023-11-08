@@ -8,12 +8,13 @@ import { deleteComment, deleteCommentReply, updateComment } from "../../actions/
 import { uploadComment, uploadCommentReply } from "../../actions/UploadAction";
 import "./PostModal.css";
 import { Modal, useMantineTheme } from "@mantine/core";
+import defaultProfile from '../../img/defaultProfile.png'
+
 // import InputEmoji from "react-input-emoji";w
 
 function PostModal({ modalOpened, setModalOpened, data, time }) {
   const theme = useMantineTheme();
   const dispatch = useDispatch();
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useSelector((state) => state.authReducer.authData);
   const commentDesc = useRef(null);
   const replyDesc = useRef(null);
@@ -187,7 +188,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
               src={
                 data.userInfo.profilePicture
                   ? data.userInfo.profilePicture
-                  : publicFolder + "defaultProfilee.png"
+                  : defaultProfile
               }
               alt="profile"
               className="profilePicture"
@@ -229,7 +230,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                     <img
                       src={
                         comment.commentUser.profilePicture ||
-                        publicFolder + "defaultProfilee.png"
+                        defaultProfile
                       }
                       alt="profile"
                       className="profilePicture"
@@ -257,7 +258,7 @@ function PostModal({ modalOpened, setModalOpened, data, time }) {
                                   <img
                                     src={
                                       reply.replyUser.profilePicture ||
-                                      publicFolder + "defaultProfilee.png"
+                                      defaultProfile
                                     }
                                     alt="profile"
                                     className="profilePicture"

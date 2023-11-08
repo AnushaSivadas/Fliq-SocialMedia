@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import defaultProfile from '../../img/defaultProfile.png'
 
 const SearchedUsers = ({userData,toggleVisibility}) => {
   
@@ -15,7 +16,7 @@ const SearchedUsers = ({userData,toggleVisibility}) => {
             src={
               userData?.profilePicture
                 ? userData.profilePicture
-                : process.env.REACT_APP_PUBLIC_FOLDER + "defaultProfilee.png"
+                : defaultProfile
             }
             alt="Profile"
             className="followerImage"

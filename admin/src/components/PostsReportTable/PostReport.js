@@ -5,6 +5,7 @@ import { UilInfoCircle } from "@iconscout/react-unicons";
 import ReportedPostModal from "../ReportedPostModal/ReportedPostModal.js";
 import Swal from "sweetalert2";
 import * as PostsApi from "../../api/PostsRequests";
+import defaultProfile from '../../img/defaultProfile.png'
 
 const makeStyle = (status) => {
   if (!status) {
@@ -21,7 +22,6 @@ const makeStyle = (status) => {
 };
 
 const Post = ({ data, index }) => {
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const [reportedPostInfoOpen, setReportedPostInfoOpened] = useState(false);
   const [status, setStatus] = useState(data.post.status);
@@ -68,7 +68,7 @@ const Post = ({ data, index }) => {
        <img src={
             data.post.image
               ? data.post.image
-              : publicFolder + "defaultProfilee.png"
+              : defaultProfile
           }
           alt="post"
           className="postImage"
