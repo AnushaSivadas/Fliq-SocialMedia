@@ -191,7 +191,7 @@ const Post = ({ data }) => {
         <ChatShareModal
         chatShareOpen={chatShareOpen}
         setChatShareOpen={setChatShareOpen}
-        url={`http://fliqmedia.shop/getPost/${data._id}`}
+        url={`https://fliqmedia.shop/getPost/${data._id}`}
         data={data}
       />
       </div>
