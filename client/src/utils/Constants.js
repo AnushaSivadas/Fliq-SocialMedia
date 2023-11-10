@@ -1,5 +1,5 @@
-export const baseUrl = "http://localhost:3000/api";
-// export const baseUrl = "https://fliqmedia.shop/api";
+// export const baseUrl = "http://localhost:3000/api";
+export const baseUrl = "https://fliqmedia.shop/api";
 
 export const reportData=[
     "It's spam",
