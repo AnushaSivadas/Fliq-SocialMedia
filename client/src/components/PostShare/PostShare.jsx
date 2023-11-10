@@ -4,7 +4,7 @@ import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadImage, uploadPost,uploadVideo } from "../../actions/UploadAction";
+import { uploadPost} from "../../actions/UploadAction";
 import * as UploadApi from "../../api/UploadRequest";
 import InputEmoji from "react-input-emoji";
 import defaultProfile from '../../img/defaultProfile.png'
@@ -98,8 +98,8 @@ const PostShare = () => {
       try {
         // dispatch(uploadVideo(data));
         const videoUrl = await UploadApi.uploadVideo(data); // Replace with your video upload API call
-       newPost.video = videoUrl.data; // Assign the video URL/key to the newPost object
-      console.log("aftervideo",newPost)
+        newPost.video = videoUrl.data; // Assign the video URL/key to the newPost object
+        console.log("aftervideo", newPost)
       } catch (err) {
         console.log(err);
       }
@@ -146,15 +146,16 @@ const PostShare = () => {
           maxLength={MAX_INPUT_LENGTH}
           onChange={handleInputChange}
         /> */}
-        <InputEmoji 
-          placeholder="What's happening?"
-          required
-          ref={desc}
-          value={inputValue}
-          maxLength={MAX_INPUT_LENGTH}
-          onChange={handleInputChange}
-          position="below"
-        />
+        <div className="emoji-picker-container">
+          <InputEmoji
+            placeholder="What's happening?"
+            required
+            ref={desc}
+            value={inputValue}
+            maxLength={MAX_INPUT_LENGTH}
+            onChange={handleInputChange}
+          />
+        </div>
         <div className="postOptions">
           <div
             className="option"
@@ -185,8 +186,8 @@ const PostShare = () => {
           <div style={{ display: "none" }}>
             <input type="file"
               accept="image/*"
-             ref={imageRef} 
-             onChange={onImageChange} />
+              ref={imageRef}
+              onChange={onImageChange} />
           </div>
           <div style={{ display: "none" }}>
             <input
