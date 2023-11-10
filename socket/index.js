@@ -1,7 +1,8 @@
 const io = require("socket.io")(8800, {
   cors: {
     // origin: "http://localhost:3000",
-    origin:"https://fliqmedia.shop",
+    // origin:"https://fliqmedia.shop",
+    origin: ["http://localhost:3000", "https://socket.fliqmedia.shop","http://socket.fliqmedia.shop","https://fliqmedia.shop"],
   },
 });
 
