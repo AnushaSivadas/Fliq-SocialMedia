@@ -153,6 +153,7 @@ const PostShare = () => {
           value={inputValue}
           maxLength={MAX_INPUT_LENGTH}
           onChange={handleInputChange}
+          position="below"
         />
         <div className="postOptions">
           <div
