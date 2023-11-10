@@ -41,23 +41,23 @@ function AppContent() {
       {showSidebar && <Sidebar />}
       <Routes>
         <Route
-          path="/admin"
+          path="/"
           element={user ? <Navigate to="dashboard" /> : <Auth />}
         />
         <Route
-          path="/admin/dashboard"
+          path="/dashboard"
           element={user ? <Dashboard /> : <Navigate to="../" />}
         />
         <Route
-          path="/admin/posts"
+          path="/posts"
           element={user ? <Posts /> : <Navigate to="../" />}
         />
         <Route
-          path="/admin/users"
+          path="/users"
           element={user ? <Users /> : <Navigate to="../" />}
         />
         <Route
-          path="/admin/postsReport"
+          path="/postsReport"
           element={user ? <PostsReports /> : <Navigate to="../" />}
         />
       </Routes>
