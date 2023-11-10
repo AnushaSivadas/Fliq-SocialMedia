@@ -111,3 +111,16 @@
 .UilPen{
   cursor: pointer;
 }
+.pcard-logout-button{
+  display: none;
+}
+
+
+@media(max-width:942px){
+.pcard-logout-button{ 
+  display: block;
+  width: 7rem;
+  height: 2rem;
+  align-self: center;
+}
+}

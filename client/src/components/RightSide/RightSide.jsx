@@ -45,7 +45,7 @@ const navigateToProfile = (profileUserId) => {
   }
 
   return (
-    <div className="RightSide">
+    <div className="RightSide hidden">
       {/* Side Navbar */}
 
       <NavIcons />
@@ -54,9 +54,9 @@ const navigateToProfile = (profileUserId) => {
       <form onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
-        }}
+        }} 
       >
-        <div className="Search">
+        <div className="Search ">
           <input
             type="text"
             placeholder="#Explore"
@@ -69,12 +69,12 @@ const navigateToProfile = (profileUserId) => {
           </button>
         </div>
         {showSearch &&
-        <div style={{display:"flex",justifyContent:"end",paddingRight:"10px",paddingTop:"5px"}}
+        <div className="" style={{display:"flex",justifyContent:"end",paddingRight:"10px",paddingTop:"5px"}}
         onClick={()=>toggleVisibility()}><AiOutlineClose/>
         </div>}
       </form>
 
-      <div className="Chat-list">
+      <div className="Chat-list ">
         {showSearch &&
           searchUsers.map((user, index) => (
             <div
@@ -89,7 +89,9 @@ const navigateToProfile = (profileUserId) => {
           ))}
       </div>
 
-      <FollowersCard />
+<FollowersCard />
+
+
 
       <ShareModal modalOpened={modalOpened} setModalOpened={setModalOpened} />
     </div>

@@ -5,3 +5,10 @@
     align-items: center;
     overflow: auto;
 }
+
+@media(max-width:768px){
+    .hiddenProfile{
+        display: none;
+    }
+    
+  }

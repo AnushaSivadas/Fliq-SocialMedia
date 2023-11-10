@@ -43,7 +43,10 @@ const User = ({ person }) => {
         />
         <div className="name">
           
-            {person.username}
+            {/* {person.username} */}
+            {person.firstname}&nbsp;
+            {/* {person.lastname} */}
+
           {/* <span></span> */}
           {/* <span>@{person.username}</span> */}
         </div>

@@ -5,7 +5,7 @@ import LogoSearch from '../LogoSearch/LogoSearch'
 
 const ProfileLeft = () => {
   return (
-    <div className="ProfileSide">
+    <div className="ProfileSide hiddenProfile">
         <LogoSearch/>
         <InfoCard/>
         {/* <FollowersCard/> */}

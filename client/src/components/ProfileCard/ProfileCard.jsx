@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./ProfileCard.css";
 import Swal from "sweetalert2";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "../../actions/UserAction";
 import { getFollowers, getFollowing } from "../../api/UserRequests";
 import Followers from "../Followers/Followers";
-import {UilPen } from "@iconscout/react-unicons"
+import { UilPen } from "@iconscout/react-unicons"
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -18,7 +18,7 @@ import TextField from "@mui/material/TextField";
 import { changeUsername } from "../../actions/UserAction";
 import defaultProfile from '../../img/defaultProfile.png'
 import defaultCover from '../../img/defaultCover.jpg'
-
+import { logout } from "../../actions/AuthActions";
 
 
 const ProfileCard = ({ location }) => {
@@ -39,17 +39,21 @@ const ProfileCard = ({ location }) => {
       setFollowing(profile.data.followers.includes(user._id));
     };
     // if (params.id && params.id !== user._id) {
-      fetchProfileUser();
+    fetchProfileUser();
     // }
   }, [user, profileUserId]);
 
+  const handleLogOut = () => {
+    dispatch(logout());
+  };
+
   const handleFollow = () => {
-    if(following)
-    { dispatch(unfollowUser(profileUser._id, user))
-     }else{
-    dispatch(followUser(profileUser._id, user));
-     }
-    setFollowing((prev) =>prev= !prev);
+    if (following) {
+      dispatch(unfollowUser(profileUser._id, user))
+    } else {
+      dispatch(followUser(profileUser._id, user));
+    }
+    setFollowing((prev) => prev = !prev);
   };
 
   const navigateToChat = (userId) => {
@@ -57,9 +61,9 @@ const ProfileCard = ({ location }) => {
   };
 
   const navigateToProfile = (profileUserId) => {
-    navigate("/profile", { state : { profileUserId } });
+    navigate("/profile", { state: { profileUserId } });
   };
-  
+
   const handleFollowersList = async () => {
     const followers = await getFollowers(profileUser._id);
     setPersons(followers.data);
@@ -71,18 +75,18 @@ const ProfileCard = ({ location }) => {
     setModalOpened(true);
   };
   const [opens, setOpens] = useState(false);
-  const [desc, setDesc] = useState(profileUser.username?profileUser.username:"");
+  const [desc, setDesc] = useState(profileUser.username ? profileUser.username : "");
 
   const handleUsernameEdit = () => {
     setOpens(true);
   };
 
   const handleCloses = () => {
-    setDesc(profileUser.username?profileUser.username:"");
+    setDesc(profileUser.username ? profileUser.username : "");
     setOpens(false);
   };
 
-  const handleChangeUsername = async() => {
+  const handleChangeUsername = async () => {
     handleCloses(false)
     const regex = /^[a-z0-9_.]+$/;
     if (desc.trim() === "") {
@@ -93,38 +97,38 @@ const ProfileCard = ({ location }) => {
       });
       return;
     }
-    else if(!desc.match(regex)){
-        Swal.fire({
-          icon: "error",
-          title: "Wrong Format",
-          text: "Only lowercase alphabets, digits, underscore, and dot are allowed",
-        });
-        return;
+    else if (!desc.match(regex)) {
+      Swal.fire({
+        icon: "error",
+        title: "Wrong Format",
+        text: "Only lowercase alphabets, digits, underscore, and dot are allowed",
+      });
+      return;
     }
-    else if(desc.length>15){
-        Swal.fire({
-          icon: "error",
-          title: "Wrong Format",
-          text: "Maximum username length is 15 characters",
-        });
-        return;
+    else if (desc.length > 15) {
+      Swal.fire({
+        icon: "error",
+        title: "Wrong Format",
+        text: "Maximum username length is 15 characters",
+      });
+      return;
     }
-       else if(!desc.match(/[a-z]/i)){
-          Swal.fire({
-            icon: "error",
-            title: "Wrong Format",
-            text: "Username must contain at least one alphabet",
-          });
-          return;
-       }
-       else if(desc===profileUser.username){
-        return;
-     }
+    else if (!desc.match(/[a-z]/i)) {
+      Swal.fire({
+        icon: "error",
+        title: "Wrong Format",
+        text: "Username must contain at least one alphabet",
+      });
+      return;
+    }
+    else if (desc === profileUser.username) {
+      return;
+    }
 
-    else{
-      let userData={
-        userId:user._id,
-        username:desc
+    else {
+      let userData = {
+        userId: user._id,
+        username: desc
       }
       dispatch(changeUsername(userData))
       Swal.fire({
@@ -164,10 +168,10 @@ const ProfileCard = ({ location }) => {
         />
       </div>
       <div className="ProfileName">
-        {location === "profilePage" && user._id === profileUserId?(
+        {location === "profilePage" && user._id === profileUserId ? (
           <span className="username">
-          {profileUser.username ?profileUser.username :"Create a username"}
-          <UilPen
+            {profileUser.username ? profileUser.username : "Create a username"}
+            <UilPen
               width="2rem"
               height="1rem"
               onClick={handleUsernameEdit}
@@ -178,12 +182,12 @@ const ProfileCard = ({ location }) => {
               <DialogContent>
                 <DialogContentText>
                   <p className="text-red-500">
-                    *only lowercase alphabets,numbers,dot and underscore 
+                    *only lowercase alphabets,numbers,dot and underscore
                   </p>
                 </DialogContentText>
                 <TextField
                   autoFocus
-                  defaultValue={profileUser.username?profileUser.username:""}
+                  defaultValue={profileUser.username ? profileUser.username : ""}
                   value={desc}
                   margin="dense"
                   id="name"
@@ -191,7 +195,7 @@ const ProfileCard = ({ location }) => {
                   fullWidth
                   // maxlength={MAX_INPUT_LENGTH}
                   onChange={handleInputChange}
-                  // onChange={(e) => setDesc(e.target.value)}
+                // onChange={(e) => setDesc(e.target.value)}
                 />
               </DialogContent>
               <DialogActions>
@@ -202,15 +206,21 @@ const ProfileCard = ({ location }) => {
                 >
                   Confirm
                 </Button>
-                
+
               </DialogActions>
             </Dialog>
-            
-        </span>
-        ):""}
+           
+          </span>
+          
+        ) : ""}
         <span>
+          
           {profileUser.firstname} {profileUser.lastname}
         </span>
+        {location === "profilePage" && user._id === profileUserId ? (
+        <button className="button  pcard-logout-button" onClick={handleLogOut}>
+        Log Out
+      </button>):("")}
         {/* <span>
           {profileUser.worksAt
             ? profileUser.worksAt
@@ -233,11 +243,11 @@ const ProfileCard = ({ location }) => {
         )}
         {user._id !== profileUserId && location === "profilePage" && following ? (
           <button
-          className="button fc-button"
-          onClick={ ()=>navigateToChat(profileUser._id) }
-        >
-          Message
-        </button>
+            className="button fc-button"
+            onClick={() => navigateToChat(profileUser._id)}
+          >
+            Message
+          </button>
         ) : (
           ""
         )}
@@ -293,10 +303,10 @@ const ProfileCard = ({ location }) => {
       {location === "profilePage" ? (
         ""
       ) : (
-        <span 
-        onClick={ ()=>navigateToProfile(profileUser._id)}
-          >          
-            My Profile
+        <span
+          onClick={() => navigateToProfile(profileUser._id)}
+        >
+          My Profile
         </span>
       )}
       <Followers

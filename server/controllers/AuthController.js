@@ -104,6 +104,7 @@ export const googleRegister = async (req, res) => {
         email: email,
         firstname: given_name,
         lastname: family_name,
+        username:given_name,
         googleId: sub,
         profilePicture: picture,
         expiresAt: null,

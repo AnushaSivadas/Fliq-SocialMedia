@@ -1,14 +1,47 @@
-.Profile{
+.Profile {
     position: relative;
+  }
+  
+  .Profile-elements {
     display: grid;
     grid-template-columns: 18rem auto 20rem;
     gap: 1rem;
-}
-
-
-.Profile-center{
+    padding: 0px 1rem;
+    min-height: 100vh; /* Ensure a minimum height to cover the whole viewport */
+  }
+  
+  .Profile-center {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-   
-}
+  }
+  
+  @media (max-width: 1200px) {
+    .Profile-elements {
+      grid-template-columns: 13rem auto 15rem;
+    }
+  }
+  
+  @media (max-width: 942px) {
+    .Profile-elements {
+      grid-template-columns: 13rem auto;
+    }
+  
+    .bottom-nav {
+      width: 100%;
+      background-color: white;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1000; /* Set a high z-index to ensure the icons appear above other content */
+    }
+  }
+  @media(max-width:768px){
+    .Profile-elements {
+      grid-template-columns:  auto;
+      
+    }
+    
+    
+  }
+  

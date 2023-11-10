@@ -14,7 +14,6 @@
 }
 
 
-
 /* left side */
 .a-left{
     gap: 2rem;
@@ -75,4 +74,13 @@
   color: red;
   font-size: 12px;
   margin-top: 5px;
+}
+
+@media(max-width:786px) {
+  .Auth{
+    flex-direction: column;
+  gap: 2rem;
+
+  }
+    
 }

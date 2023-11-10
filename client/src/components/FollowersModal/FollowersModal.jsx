@@ -13,14 +13,13 @@ const FollowersModal = ({ modalOpened, setModalOpened }) => {
       }
       overlayOpacity={0.55}
       overlayBlur={3}
-      // size="50%"
-      fullscreen    
-      
+      size="30%"
+            
       opened={modalOpened}
       onClose={() => setModalOpened(false)}
     >
 
-    <FollowersCard location='modal'/>
+    <FollowersCard location='modal' />
     <br/>
     <br/>
     </Modal>
