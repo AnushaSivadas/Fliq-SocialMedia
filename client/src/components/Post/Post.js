@@ -175,7 +175,7 @@ const Post = ({ data }) => {
         <img src={Comment} alt=""style={{cursor:"pointer"}} onClick={() => {data.comments.length>0?setModalOpened(true):setModalOpened(false)}}/>
         <button
           ref={copyButtonRef}
-          data-clipboard-text = {`http://localhost:3000/getPost/${data._id}`}
+          data-clipboard-text = {`https://fliqmedia.shop/getPost/${data._id}`}
           onClick={() => setChatShareOpen(true)}
 
           style={{
@@ -191,7 +191,7 @@ const Post = ({ data }) => {
         <ChatShareModal
         chatShareOpen={chatShareOpen}
         setChatShareOpen={setChatShareOpen}
-        url={`http://localhost:3000/getPost/${data._id}`}
+        url={`http://fliqmedia.shop/getPost/${data._id}`}
         data={data}
       />
       </div>
