@@ -94,15 +94,24 @@ const Post = ({ data }) => {
 
   //Convert hours to day
   var days = Math.floor(hours / 24);
+
+  var months = Math.floor(days/30)
   let timeDifference;
   if (seconds < 60) {
     timeDifference = seconds + " seconds";
   } else if (minutes < 60) {
     timeDifference = minutes + " minutes";
-  } else if (hours < 24) {
+  }else if (hours < 24) {
     timeDifference = hours + " hours";
-  } else {
+  }else if (days < 30) {
     timeDifference = days + " days";
+  } else {
+    if(months==1)
+    timeDifference = months + " month";
+  else
+  timeDifference = months + " months";
+
+
   }
   const [isExpanded, setIsExpanded] = useState(false);
 
